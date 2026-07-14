@@ -4,7 +4,7 @@
 
 [![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)]()
 [![](https://img.shields.io/badge/Author-河北尚智得-orange.svg)](https://www.szdsoft.cn/about)
-[![](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://gitee.com/szdsdp/demo)
+[![](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://github.com/szdsdp/z000)
 
 ## 项目介绍
 
