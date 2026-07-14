@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.purOrder.PurOrderSchedMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.purOrder.PurOrderSched" id="Result">
+        <result property="orderId" column="order_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="schedLine" column="sched_line"/>
+        <result property="deliveryDate" column="delivery_date"/>
+        <result property="quantity" column="quantity"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_mm_pur_order_scheds
+    </sql>
+
+    <select id="selectList" resultMap="Result">
+        <include refid="selectSql"/>
+        where order_id = #{orderId}
+        order by item_no, sched_line
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mm_pur_order_scheds (order_id, item_no, sched_line, delivery_date, quantity)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderId}, #{item.itemNo}, #{item.schedLine}, #{item.deliveryDate}, #{item.quantity})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByPurOrderId" parameterType="String">
+        delete
+        from z000_mm_pur_order_scheds
+        where order_id = #{orderId}
+    </delete>
+</mapper>

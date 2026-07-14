@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.purStore.PurStoreItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.purStore.PurStoreItem" id="Result">
+        <id property="storeId" column="store_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="mtlName" column="mtl_name"/>
+        <result property="fact" column="fact"/>
+        <result property="store" column="store"/>
+        <result property="quantity" column="quantity"/>
+        <result property="unit" column="unit"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="orderItemNo" column="order_item_no"/>
+        <result property="refBussDocId" column="ref_buss_doc_id"/>
+        <result property="refBstp" column="ref_bstp"/>
+        <result property="itemText" column="item_text"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_mm_pur_store_item
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where store_id = #{storeId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mm_pur_store_item (store_id, item_no, mtl_code, fact, store, quantity, unit, order_no, order_item_no, ref_buss_doc_id, ref_bstp, item_text)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.storeId}, #{item.itemNo}, #{item.mtlCode}, #{item.fact}, #{item.store}, #{item.quantity}, #{item.unit}, #{item.orderNo}, #{item.orderItemNo}, #{item.refBussDocId}, #{item.refBstp}, #{item.itemText})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByPurStoreId" parameterType="String">
+        delete
+        from z000_mm_pur_store_item
+        where store_id = #{storeId}
+    </delete>
+
+    <select id="countByOrderNoAndOrderItemNo" resultType="int">
+        select count(1)
+        from z000_mm_pur_store_item
+        where order_no = #{orderNo}
+          and order_item_no = #{orderItemNo}
+    </select>
+
+    <select id="countValidByOrderNoAndOrderItemNo" resultType="java.math.BigDecimal">
+        select coalesce(sum(i.quantity), 0)
+        from z000_mm_pur_store_item i
+                 inner join z000_mm_pur_store_header h on h.store_id = i.store_id
+        where i.order_no = #{orderNo}
+          and i.order_item_no = #{orderItemNo}
+          and h.buss_status != 'E'
+    </select>
+
+    <select id="selectStoreIdsByRefDoc" resultType="string">
+        select distinct store_id
+        from z000_mm_pur_store_item
+        where ref_buss_doc_id = #{refBussDocId}
+          and ref_bstp = #{refBstp}
+    </select>
+
+    <select id="countStoreByRefDoc" resultType="int">
+        select count(distinct i.store_id)
+        from z000_mm_pur_store_item i
+        inner join z000_mm_pur_store_header h on i.store_id = h.store_id
+        where i.ref_buss_doc_id = #{refBussDocId}
+          and i.ref_bstp = #{refBstp}
+        <choose>
+            <when test="bussStatus == '!E'">
+                and h.buss_status != 'E'
+            </when>
+            <otherwise>
+                and h.buss_status = #{bussStatus}
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPurStoreIdAndItemNo">
+        delete
+        from z000_mm_pur_store_item
+        where store_id = #{storeId}
+          and item_no = #{itemNo}
+    </delete>
+</mapper>

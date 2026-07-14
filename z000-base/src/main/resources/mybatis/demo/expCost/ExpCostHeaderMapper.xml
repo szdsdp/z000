@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szd.z000.base.orm.mapper.demo.expCost.ExpCostHeaderMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.demo.expCost.ExpCostHeader" id="Result">
+        <result property="bussId" column="buss_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="cmpyCreate" column="cmpy_create"/>
+        <result property="cstcCreate" column="cstc_create"/>
+        <result property="userId" column="user_id"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="curr" column="curr"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="title" column="title"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="select">
+        select buss_id,
+               buss_doc_id,
+               cmpy,
+               cstc,
+               cmpy_create,
+               cstc_create,
+               user_id,
+               bstp,
+               router_code,
+               buss_date,
+               curr,
+               buss_status,
+               title,
+               amt_apply,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from z000_exp_cost_header
+    </sql>
+
+    <!-- 查询列表 -->
+    <select id="selectList" parameterType="com.szd.z000.base.orm.domain.demo.expCost.ExpCostHeader" resultMap="Result">
+        <include refid="select"/>
+        <where>
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ user_id = userId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ bstp = bstp @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ create_time = createTime @E@
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ title = title @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE
+        </if>
+        <if test="orders == null or orders.size()== 0">
+            order by create_time desc
+        </if>
+    </select>
+
+    <!-- 查询详情 -->
+    <select id="selectById" parameterType="String" resultMap="Result">
+        <include refid="select"/>
+        where buss_id = #{bussId}
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="com.szd.z000.base.orm.domain.demo.expCost.ExpCostHeader">
+        insert into z000_exp_cost_header (buss_id, buss_doc_id, cmpy, cstc, cmpy_create, cstc_create, user_id, bstp,
+                                          router_code, buss_date, curr, buss_status, title, amt_apply, create_by, create_time, remark)
+        values (#{bussId}, #{bussDocId}, #{cmpy}, #{cstc}, #{cmpyCreate}, #{cstcCreate}, #{userId}, #{bstp}, #{routerCode},
+                #{bussDate}, #{curr}, #{bussStatus}, #{title},  #{amtApply},  #{createBy}, #{createTime}, #{remark})
+    </insert>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="com.szd.z000.base.orm.domain.demo.expCost.ExpCostHeader">
+        update z000_exp_cost_header
+        set buss_doc_id = #{bussDocId},
+            cmpy        = #{cmpy},
+            cstc        = #{cstc},
+            cmpy_create = #{cmpyCreate},
+            cstc_create = #{cstcCreate},
+            user_id     = #{userId},
+            bstp        = #{bstp},
+            router_code = #{routerCode},
+            buss_date   = #{bussDate},
+            curr        = #{curr},
+            buss_status = #{bussStatus},
+            title       = #{title},
+            amt_apply   = #{amtApply},
+            update_by   = #{updateBy},
+            update_time = #{updateTime},
+            remark      = #{remark}
+        where buss_id = #{bussId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        update z000_exp_cost_header
+        set buss_status = #{bussStatus}
+        <if test="bussDocId != null and bussDocId != ''">, buss_doc_id = #{bussDocId}</if>
+        where buss_id = #{bussId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteById" parameterType="String">
+        delete
+        from z000_exp_cost_header
+        where buss_id = #{bussId}
+    </delete>
+
+</mapper>

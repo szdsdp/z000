@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.pp.orderExtract.OrderExtractHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.pp.orderExtract.OrderExtractHeader" id="Result">
+        <id property="orderNo" column="order_no"/>
+        <result property="orderType" column="order_type"/>
+        <result property="orderDesc" column="order_desc"/>
+        <result property="prodVer" column="prod_ver"/>
+        <result property="finishDate" column="finish_date"/>
+        <result property="startDate" column="start_date"/>
+        <result property="resNo" column="res_no"/>
+        <result property="shippedQty" column="shipped_qty"/>
+        <result property="orderQty" column="order_qty"/>
+        <result property="unit" column="unit"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="fact" column="fact"/>
+        <result property="routingNo" column="routing_no"/>
+    </resultMap>
+
+    <sql id="selectSql">select * from z000_pp_order_extract_header</sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ order_no = orderNo @E@
+            AND @S@ mtl_code = mtlCode @E@
+            AND @S@ fact = fact @E@
+            AND @S@ prod_ver = prodVer @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">@OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">ORDER BY order_no ASC</if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql"/> where order_no = #{orderNo}
+    </select>
+
+    <insert id="batchUpsert">
+        insert into z000_pp_order_extract_header (order_no, order_type, order_desc, prod_ver, finish_date, start_date, res_no, shipped_qty, order_qty, unit, mtl_code, fact, routing_no)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderNo}, #{item.orderType}, #{item.orderDesc}, #{item.prodVer}, #{item.finishDate}, #{item.startDate}, #{item.resNo},
+             #{item.shippedQty}, #{item.orderQty}, #{item.unit}, #{item.mtlCode}, #{item.fact}, #{item.routingNo})
+        </foreach>
+        on duplicate key update
+            order_type = values(order_type), order_desc = values(order_desc), prod_ver = values(prod_ver),
+            finish_date = values(finish_date), start_date = values(start_date), res_no = values(res_no),
+            shipped_qty = values(shipped_qty), order_qty = values(order_qty), unit = values(unit),
+            mtl_code = values(mtl_code), fact = values(fact), routing_no = values(routing_no)
+    </insert>
+</mapper>

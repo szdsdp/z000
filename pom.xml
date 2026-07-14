@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.szd</groupId>
     <artifactId>z000</artifactId>
-    <version>1.0.0</version>
+    <version>2.1.0</version>
     <packaging>pom</packaging>
     <name>z000</name>
     <description>企业应用模板项目</description>

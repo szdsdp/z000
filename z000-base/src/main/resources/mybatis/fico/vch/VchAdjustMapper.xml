@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.fico.vch.VchAdjustMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.fico.vch.VchAdjust" id="ResultMap">
+        <result property="costId" column="cost_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="accs" column="accs"/>
+        <result property="drCr" column="dr_cr"/>
+        <result property="amt" column="amt"/>
+        <result property="supp" column="supp"/>
+        <result property="cust" column="cust"/>
+        <result property="sgl" column="sgl"/>
+        <result property="summary" column="summary"/>
+        <result property="cstc" column="cstc"/>
+        <result property="prfc" column="prfc"/>
+        <result property="busc" column="busc"/>
+        <result property="assignNo" column="assign_no"/>
+        <result property="reas" column="reas"/>
+        <result property="poDoc" column="po_doc"/>
+        <result property="poDocItem" column="po_doc_item"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="segm" column="segm"/>
+        <result property="fusc" column="fusc"/>
+        <result property="assetNo" column="asset_no"/>
+        <result property="assetNoSub" column="asset_no_sub"/>
+        <result property="wbsNo" column="wbs_no"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_fi_vch_adjust
+    </sql>
+
+    <select id="selectList" parameterType="string" resultMap="ResultMap">
+        <include refid="selectSql"/>
+        where cost_id = #{costId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into z000_fi_vch_adjust
+        (cost_id, item_no, accs, dr_cr, amt, supp, cust, sgl, summary, cstc,
+        prfc, busc, assign_no, reas, po_doc, po_doc_item, order_code, segm, fusc, asset_no, asset_no_sub, wbs_no)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.costId}, #{item.itemNo}, #{item.accs}, #{item.drCr}, #{item.amt},
+             #{item.supp}, #{item.cust}, #{item.sgl}, #{item.summary}, #{item.cstc},
+             #{item.prfc}, #{item.busc}, #{item.assignNo}, #{item.reas},
+             #{item.poDoc}, #{item.poDocItem}, #{item.orderCode},
+             #{item.segm}, #{item.fusc}, #{item.assetNo}, #{item.assetNoSub}, #{item.wbsNo})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByCostId" parameterType="String">
+        delete from z000_fi_vch_adjust where cost_id = #{costId}
+    </delete>
+</mapper>

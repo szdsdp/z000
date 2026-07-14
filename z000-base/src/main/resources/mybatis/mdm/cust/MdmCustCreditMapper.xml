@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.cust.MdmCustCreditMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.cust.MdmCustCredit" id="Result">
+        <id property="applyId" column="apply_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="creditSgmnt" column="credit_sgmnt"/>
+        <result property="creditLimit" column="credit_limit"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_mdm_cust_credit
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where apply_id = #{applyId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mdm_cust_credit (apply_id, item_no, credit_sgmnt, credit_limit)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.applyId}, #{item.itemNo}, #{item.creditSgmnt}, #{item.creditLimit})
+        </foreach>
+    </insert>
+
+    <delete id="deleteById" parameterType="String">
+        delete
+        from z000_mdm_cust_credit
+        where apply_id = #{applyId}
+    </delete>
+</mapper>

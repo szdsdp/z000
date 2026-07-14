@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.purContract.PurContractItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.purContract.PurContractItem" id="Result">
+        <id property="contractId" column="contract_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="itemText" column="item_text"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="fact" column="fact"/>
+        <result property="store" column="store"/>
+        <result property="sendStore" column="send_store"/>
+        <result property="needNo" column="need_no"/>
+        <result property="mtlGroup" column="mtl_group"/>
+        <result property="quantity" column="quantity"/>
+        <result property="unit" column="unit"/>
+        <result property="price" column="price"/>
+        <result property="priceUnit" column="price_unit"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_pur_contract_item
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where contract_id = #{contractId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mm_pur_contract_item (contract_id, item_no, item_text, mtl_code, fact, store, send_store, need_no, mtl_group,
+                                       quantity, unit, price, price_unit)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.contractId}, #{item.itemNo}, #{item.itemText}, #{item.mtlCode}, #{item.fact},
+             #{item.store}, #{item.sendStore}, #{item.needNo}, #{item.mtlGroup},
+             #{item.quantity}, #{item.unit}, #{item.price}, #{item.priceUnit})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByContractId" parameterType="String">
+        delete from z000_mm_pur_contract_item where contract_id = #{contractId}
+    </delete>
+</mapper>

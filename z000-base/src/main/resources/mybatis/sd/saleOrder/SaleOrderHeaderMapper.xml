@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.saleOrder.SaleOrderHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.saleOrder.SaleOrderHeader" id="Result">
+        <result property="orderId" column="order_id"/>
+        <result property="soldTo" column="sold_to"/>
+        <result property="shipTo" column="ship_to"/>
+        <result property="billTo" column="bill_to"/>
+        <result property="orderType" column="order_type"/>
+        <result property="salesOrg" column="sales_org"/>
+        <result property="distrChan" column="distr_chan"/>
+        <result property="prodGroup" column="prod_group"/>
+        <result property="vbeln" column="vbeln"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_sd_sale_order_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where order_id = #{orderId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_sd_sale_order_header (order_id, buss_doc_id, sold_to, ship_to, bill_to,
+                                         order_type, sales_org, distr_chan, prod_group,
+                                         buss_date, buss_status, bstp, router_code, title, remark, cmpy, cstc,
+                                         create_by, create_time)
+        VALUES (#{orderId}, #{bussDocId}, #{soldTo}, #{shipTo}, #{billTo},
+                #{orderType}, #{salesOrg}, #{distrChan}, #{prodGroup},
+                #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark}, #{cmpy}, #{cstc},
+                #{createBy}, #{createTime})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_sd_sale_order_header
+        SET
+            sold_to        = #{soldTo},
+            ship_to        = #{shipTo},
+            bill_to        = #{billTo},
+            order_type     = #{orderType},
+            sales_org      = #{salesOrg},
+            distr_chan     = #{distrChan},
+            prod_group       = #{prodGroup},
+            buss_doc_id    = #{bussDocId},
+            buss_date      = #{bussDate},
+            bstp           = #{bstp},
+            router_code    = #{routerCode},
+            title          = #{title},
+            remark         = #{remark},
+            cmpy           = #{cmpy},
+            cstc           = #{cstc},
+            update_by      = #{updateBy},
+            update_time    = #{updateTime}
+        where order_id = #{orderId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_sd_sale_order_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE order_id = #{orderId}
+    </update>
+
+    <update id="updateSapRet">
+        update z000_sd_sale_order_header
+        <set>
+            <if test="vbeln != null and vbeln != ''">
+                buss_status = 'F',
+                vbeln = #{vbeln},
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_sd_sale_order_header WHERE order_id = #{orderId}
+    </delete>
+</mapper>

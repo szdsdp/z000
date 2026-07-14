@@ -1,11 +1,9 @@
 package com.szd.z000.web.z2.service;
 
 import com.szd.core.client.ClientCore;
-import com.szd.core.client.exception.ClientCustomException;
-import com.szd.z000.orm.domain.z2.MdmCmpy;
-import com.szd.z000.orm.mapper.z2.MdmCmpyMapper;
+import com.szd.z000.base.orm.domain.z2.MdmCmpy;
+import com.szd.z000.base.orm.mapper.z2.MdmCmpyMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;

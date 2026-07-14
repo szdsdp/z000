@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.fico.vch.VchItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.fico.vch.VchItem" id="Result">
+        <id property="costId" column="cost_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="bsubl" column="bsubl"/>
+        <result property="deduFlag" column="dedu_flag"/>
+        <result property="taxr" column="taxr"/>
+        <result property="amt" column="amt"/>
+        <result property="amtTax" column="amt_tax"/>
+        <result property="amtNoTax" column="amt_no_tax"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_fi_vch_item
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where cost_id = #{costId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_fi_vch_item (cost_id, item_no, bsubl, dedu_flag, taxr, amt, amt_tax, amt_no_tax)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.costId}, #{item.itemNo}, #{item.bsubl}, #{item.deduFlag}, #{item.taxr},
+             #{item.amt}, #{item.amtTax}, #{item.amtNoTax})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByCostId" parameterType="String">
+        delete from z000_fi_vch_item where cost_id = #{costId}
+    </delete>
+</mapper>

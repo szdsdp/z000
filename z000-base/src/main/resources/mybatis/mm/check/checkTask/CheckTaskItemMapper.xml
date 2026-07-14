@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.check.checkTask.CheckTaskItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.check.checkTask.CheckTaskItem" id="Result">
+        <id property="taskId" column="task_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="sysQnt" column="sys_qnt"/>
+        <result property="countQnt" column="count_qnt"/>
+        <result property="diffQnt" column="diff_qnt"/>
+        <result property="countStatus" column="count_status"/>
+        <result property="diffDesc" column="diff_desc"/>
+        <result property="moveType" column="move_type"/>
+        <result property="unit" column="unit"/>
+        <result property="counter" column="counter"/>
+        <result property="itemText" column="item_text"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_check_task_item
+    </sql>
+
+    <select id="selectList" parameterType="string" resultMap="Result">
+        <include refid="selectSql"/>
+        where task_id = #{taskId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mm_check_task_item (task_id, item_no, mtl_code, sys_qnt, count_qnt,
+                                             diff_qnt, count_status, diff_desc, move_type,
+                                             unit, counter, item_text)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.taskId}, #{item.itemNo}, #{item.mtlCode}, #{item.sysQnt}, #{item.countQnt},
+             #{item.diffQnt}, #{item.countStatus}, #{item.diffDesc}, #{item.moveType},
+             #{item.unit}, #{item.counter}, #{item.itemText})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByTaskId" parameterType="string">
+        delete from z000_mm_check_task_item where task_id = #{taskId}
+    </delete>
+
+    <delete id="deleteByTaskIdAndItemNo">
+        delete from z000_mm_check_task_item
+        where task_id = #{taskId} and item_no = #{itemNo}
+    </delete>
+
+    <update id="updateItem">
+        update z000_mm_check_task_item
+        set count_qnt   = #{countQnt},
+            diff_qnt    = #{diffQnt},
+            count_status = #{countStatus},
+            move_type   = #{moveType},
+            unit        = #{unit},
+            counter     = #{counter},
+            item_text   = #{itemText}
+        where task_id = #{taskId} and item_no = #{itemNo}
+    </update>
+</mapper>

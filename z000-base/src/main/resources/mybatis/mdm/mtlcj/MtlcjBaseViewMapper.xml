@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.mtlcj.MtlcjBaseViewMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.mtlcj.MtlcjBaseView" id="Result">
+        <result property="applyId" column="apply_id"/>
+        <result property="unitBase" column="unit_base"/>
+        <result property="mtlGroup" column="mtl_group"/>
+        <result property="sizeDim" column="size_dim"/>
+        <result property="unitPo" column="unit_po"/>
+        <result property="netWt" column="net_wt"/>
+        <result property="unitWt" column="unit_wt"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mdm_mtlcj_base_view
+    </sql>
+
+    <select id="selectByApplyId" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where apply_id = #{applyId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_mdm_mtlcj_base_view (apply_id, unit_base, mtl_group, size_dim, unit_po, net_wt, unit_wt)
+        VALUES (#{applyId}, #{unitBase}, #{mtlGroup}, #{sizeDim}, #{unitPo}, #{netWt}, #{unitWt})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_mdm_mtlcj_base_view
+        SET unit_base  = #{unitBase},
+            mtl_group  = #{mtlGroup},
+            size_dim   = #{sizeDim},
+            unit_po    = #{unitPo},
+            net_wt     = #{netWt},
+            unit_wt    = #{unitWt}
+        where apply_id = #{applyId}
+    </update>
+
+    <delete id="deleteByApplyId">
+        DELETE FROM z000_mdm_mtlcj_base_view WHERE apply_id = #{applyId}
+    </delete>
+</mapper>

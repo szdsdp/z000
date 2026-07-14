@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.saleDelivery.SaleDeliveryItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.saleDelivery.SaleDeliveryItem" id="Result">
+        <id property="deliveryId" column="delivery_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="orderItemNo" column="order_item_no"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="orderQty" column="order_qty"/>
+        <result property="dlvQty" column="dlv_qty"/>
+        <result property="unit" column="unit"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_sd_sale_delivery_item
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where delivery_id = #{deliveryId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_sd_sale_delivery_item (delivery_id, item_no, order_no, order_item_no, mtl_code, order_qty, dlv_qty, unit)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.deliveryId}, #{item.itemNo}, #{item.orderNo}, #{item.orderItemNo}, #{item.mtlCode}, #{item.orderQty}, #{item.dlvQty}, #{item.unit})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByDeliveryId" parameterType="String">
+        delete from z000_sd_sale_delivery_item where delivery_id = #{deliveryId}
+    </delete>
+
+    <delete id="deleteByDeliveryIdAndItemNo">
+        delete from z000_sd_sale_delivery_item where delivery_id = #{deliveryId} and item_no = #{itemNo}
+    </delete>
+
+    <select id="sumDlvQtyByOrderNoAndOrderItemNo" resultType="java.math.BigDecimal">
+        select COALESCE(SUM(d.dlv_qty), 0)
+        from z000_sd_sale_delivery_item d
+        inner join z000_sd_sale_delivery_header h on d.delivery_id = h.delivery_id
+        where d.order_no = #{orderNo} and d.order_item_no = #{orderItemNo}
+          and h.buss_status != 'E'
+        <if test="excludeDeliveryId != null and excludeDeliveryId != ''">
+          and d.delivery_id != #{excludeDeliveryId}
+        </if>
+    </select>
+</mapper>

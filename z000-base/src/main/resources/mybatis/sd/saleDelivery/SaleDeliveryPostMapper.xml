@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.saleDelivery.SaleDeliveryPostMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.saleDelivery.SaleDeliveryPost" id="Result">
+        <result property="deliveryId" column="delivery_id"/>
+        <result property="pickDate" column="pick_date"/>
+        <result property="postDate" column="post_date"/>
+        <result property="shipDate" column="ship_date"/>
+        <result property="mblnr" column="mblnr"/>
+        <result property="mjahr" column="mjahr"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="revMblnr" column="rev_mblnr"/>
+        <result property="revMjahr" column="rev_mjahr"/>
+        <result property="revSapMsg" column="rev_sap_msg"/>
+        <result property="revSapMessId" column="rev_sap_mess_id"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        select * from z000_sd_sale_delivery_post where delivery_id = #{deliveryId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_sd_sale_delivery_post (delivery_id, pick_date, post_date, ship_date,
+            mblnr, mjahr, sap_msg, sap_mess_id)
+        VALUES (#{deliveryId}, #{pickDate}, #{postDate}, #{shipDate},
+            #{mblnr}, #{mjahr}, #{sapMsg}, #{sapMessId})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_sd_sale_delivery_post
+        <set>
+            <if test="pickDate != null">pick_date = #{pickDate},</if>
+            <if test="postDate != null">post_date = #{postDate},</if>
+            <if test="shipDate != null">ship_date = #{shipDate},</if>
+            <if test="mblnr != null and mblnr != ''">mblnr = #{mblnr},</if>
+            <if test="mjahr != null and mjahr != ''">mjahr = #{mjahr},</if>
+            <if test="sapMsg != null and sapMsg != ''">sap_msg = #{sapMsg},</if>
+            <if test="sapMessId != null and sapMessId != ''">sap_mess_id = #{sapMessId},</if>
+        </set>
+        WHERE delivery_id = #{deliveryId}
+    </update>
+
+    <update id="updateSapRet">
+        update z000_sd_sale_delivery_post
+        <set>
+            <if test="mblnr != null and mblnr != ''">mblnr = #{mblnr},</if>
+            <if test="mjahr != null and mjahr != ''">mjahr = #{mjahr},</if>
+            <if test="sapMsg != null and sapMsg != ''">sap_msg = #{sapMsg},</if>
+            <if test="sapMessId != null and sapMessId != ''">sap_mess_id = #{sapMessId},</if>
+        </set>
+        where delivery_id = #{deliveryId}
+    </update>
+
+    <update id="updateReverseSapRet">
+        update z000_sd_sale_delivery_post
+        <set>
+            <if test="revMblnr != null and revMblnr != ''">rev_mblnr = #{revMblnr},</if>
+            <if test="revMjahr != null and revMjahr != ''">rev_mjahr = #{revMjahr},</if>
+            <if test="revSapMsg != null and revSapMsg != ''">rev_sap_msg = #{revSapMsg},</if>
+            <if test="revSapMessId != null and revSapMessId != ''">rev_sap_mess_id = #{revSapMessId},</if>
+        </set>
+        where delivery_id = #{deliveryId}
+    </update>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szd.z000.base.orm.mapper.demo.expCost.ExpCostItemMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.demo.expCost.ExpCostItem" id="Result">
+        <result property="bussId" column="buss_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="bsub" column="bsub"/>
+        <result property="accs" column="accs"/>
+        <result property="taxr" column="taxr"/>
+        <result property="amt" column="amt"/>
+        <result property="amtNoTax" column="amt_notax"/>
+        <result property="amtTax" column="amt_tax"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="select">
+        select *
+        from z000_exp_cost_item
+    </sql>
+
+    <!-- 查询列表 -->
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="select"/>
+        where buss_id = #{bussId}
+    </select>
+
+    <!-- 批量新增 -->
+    <insert id="batchInsert">
+        insert into z000_exp_cost_item (buss_id, item_no, bsub, accs, taxr, amt, amt_notax, amt_tax, remark)
+        values
+        <foreach collection="list" separator="," item="item">
+            (
+            #{item.bussId}, #{item.itemNo}, #{item.bsub}, #{item.accs}, #{item.taxr}, #{item.amt},
+            #{item.amtNoTax}, #{item.amtTax}, #{item.remark}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 批量删除 -->
+    <delete id="deleteByBussId" parameterType="String">
+        delete from z000_exp_cost_item
+        where buss_id = #{bussId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,210 @@
+package com.szd.z000.web.sap.sd.saleOrderSearch.service;
+
+import com.szd.core.client.domain.common.ClientMdmReqCommon;
+import com.szd.core.client.domain.common.ClientMdmReqCommonItem;
+import com.szd.core.client.domain.common.ClientPageTableRet;
+import com.szd.core.client.domain.common.ClientRangeQuery;
+import com.szd.core.client.domain.common.ClientRpParam;
+import com.szd.core.client.exception.ClientCustomException;
+import com.szd.core.client.util.ClientUtilDate;
+import com.szd.z000.common.sap.domain.saleOrderSearch.SapSaleOrderSearchCtrRet;
+import com.szd.z000.common.sap.domain.saleOrderSearch.SapSaleOrderSearchCtrRetItem;
+import com.szd.z000.common.sap.domain.service.SapSaleOrderSearchService;
+import com.szd.z000.web.sap.sd.saleOrderSearch.domain.SaleOrderSearchResultVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 销售订单抽取-服务类
+ */
+@Service
+public class SaleOrderSearchService {
+    private static final Logger logger = LoggerFactory.getLogger(SaleOrderSearchService.class);
+
+    @Resource
+    private SapSaleOrderSearchService sapSaleOrderSearchService;
+
+    /**
+     * SAP分页查询每页大小
+     */
+    private static final int SAP_PAGE_SIZE = 100;
+
+    /**
+     * 查询销售订单列表（含分页）
+     */
+    public ClientPageTableRet queryList(ClientRpParam param) {
+        // 提取查询条件
+        Map<String, List<ClientRangeQuery>> ranges = param.getRanges();
+        String kunnr = extractRangeValue(ranges, "kunnr");
+        String vbeln = extractRangeValue(ranges, "vbeln");
+        String auart = extractRangeValue(ranges, "auart");
+        String vkorg = extractRangeValue(ranges, "vkorg");
+        String bdate = extractRangeValue(ranges, "bdate");
+        String edate = extractRangeValue(ranges, "edate");
+
+        // 提取分页参数
+        int pageNum = param.getPageNum() != null && param.getPageNum() > 0 ? param.getPageNum() : 1;
+        int pageSize = param.getPageSize() != null && param.getPageSize() > 0 ? param.getPageSize() : 20;
+
+        logger.info("销售订单抽取查询 - kunnr: {}, vbeln: {}, auart: {}, vkorg: {}, pageNum: {}, pageSize: {}",
+                kunnr, vbeln, auart, vkorg, pageNum, pageSize);
+
+        // 调用SAP查询全部销售订单数据
+        List<SaleOrderSearchResultVO> allItems = querySapData(kunnr, vbeln, auart, vkorg, bdate, edate);
+
+        logger.info("SAP返回 {} 条销售订单记录", allItems.size());
+
+        // 无数据返回空结果
+        if (CollectionUtils.isEmpty(allItems)) {
+            return createEmptyResult();
+        }
+
+        // 内存分页
+        int total = allItems.size();
+        int start = (pageNum - 1) * pageSize;
+        int end = Math.min(start + pageSize, total);
+
+        if (start >= total) {
+            start = 0;
+            end = Math.min(pageSize, total);
+        }
+
+        List<SaleOrderSearchResultVO> pagedItems = allItems.subList(start, end);
+
+        // 构建分页返回结果
+        ClientPageTableRet result = new ClientPageTableRet();
+        result.setCode(200);
+        result.setMsg("查询成功");
+        result.setRows(new ArrayList<>(pagedItems));
+        result.setTotal(total);
+
+        logger.info("返回分页数据 - 当前页: {}, 每页大小: {}, 总条数: {}", pageNum, pageSize, total);
+
+        return result;
+    }
+
+    /**
+     * 调用SAP查询销售订单数据（分页循环，直至无数据返回）
+     */
+    private List<SaleOrderSearchResultVO> querySapData(String kunnr, String vbeln,
+                                                        String auart, String vkorg, String bdate, String edate) {
+        int pageNo = 1;
+        List<SaleOrderSearchResultVO> resultList = new ArrayList<>();
+
+        // 循环分页调用SAP，直至无数据返回
+        while (true) {
+            // 构建SAP请求
+            ClientMdmReqCommon req = new ClientMdmReqCommon();
+            List<ClientMdmReqCommonItem> itemsRanges = new ArrayList<>();
+
+            // 设置分页参数
+            ClientMdmReqCommonItem pageNoItem = new ClientMdmReqCommonItem();
+            pageNoItem.setFilename("PAGENO");
+            pageNoItem.setSign("I");
+            pageNoItem.setOption("EQ");
+            pageNoItem.setLow(String.valueOf(pageNo));
+            itemsRanges.add(pageNoItem);
+
+            ClientMdmReqCommonItem pageSizeItem = new ClientMdmReqCommonItem();
+            pageSizeItem.setFilename("PAGESIZE");
+            pageSizeItem.setSign("I");
+            pageSizeItem.setOption("EQ");
+            pageSizeItem.setLow(String.valueOf(SAP_PAGE_SIZE));
+            itemsRanges.add(pageSizeItem);
+
+            // 设置查询条件
+            addRangeItem(itemsRanges, "KUNNR", kunnr);
+            addRangeItem(itemsRanges, "VBELN", vbeln);
+            addRangeItem(itemsRanges, "AUART", auart);
+            addRangeItem(itemsRanges, "VKORG", vkorg);
+            // 日期范围查询：bdate+edate 映射为 ERDAT 的 BT 查询
+            if (bdate != null && !bdate.isEmpty()) {
+                ClientMdmReqCommonItem dateItem = new ClientMdmReqCommonItem();
+                dateItem.setFilename("ERDAT");
+                dateItem.setSign("I");
+                dateItem.setOption("BT");
+                dateItem.setLow(ClientUtilDate.strToSap(bdate));
+                dateItem.setHigh(ClientUtilDate.strToSap(edate));
+                itemsRanges.add(dateItem);
+            }
+
+            req.setItemsRanges(itemsRanges);
+
+            // 调用SAP接口
+            SapSaleOrderSearchCtrRet ret = sapSaleOrderSearchService.callSap(req);
+            if (ret == null) {
+                throw new ClientCustomException("SAP销售订单抽取接口调用失败");
+            }
+            if (ret.getHeader() == null || !"S".equals(ret.getHeader().getZstau())) {
+                throw new ClientCustomException("SAP销售订单抽取查询失败：" +
+                        (ret.getHeader() != null ? ret.getHeader().getZmess() : ""));
+            }
+
+            // 无数据则退出循环
+            if (CollectionUtils.isEmpty(ret.getItems())) {
+                break;
+            }
+
+            // 转换为前端展示格式
+            for (SapSaleOrderSearchCtrRetItem item : ret.getItems()) {
+                SaleOrderSearchResultVO vo = new SaleOrderSearchResultVO();
+                BeanUtils.copyProperties(item, vo);
+                resultList.add(vo);
+            }
+
+            pageNo++;
+        }
+
+        return resultList;
+    }
+
+    /**
+     * 添加查询条件
+     */
+    private void addRangeItem(List<ClientMdmReqCommonItem> itemsRanges, String filename, String value) {
+        if (value != null && !value.isEmpty()) {
+            ClientMdmReqCommonItem item = new ClientMdmReqCommonItem();
+            item.setFilename(filename);
+            item.setSign("I");
+            item.setOption("EQ");
+            item.setLow(value);
+            itemsRanges.add(item);
+        }
+    }
+
+    /**
+     * 从ranges中提取查询值
+     */
+    private String extractRangeValue(Map<String, List<ClientRangeQuery>> ranges, String fieldName) {
+        if (ranges == null) {
+            return null;
+        }
+        List<ClientRangeQuery> queries = ranges.get(fieldName);
+        if (!CollectionUtils.isEmpty(queries)) {
+            String value = queries.get(0).getLow();
+            if (value != null && !value.isEmpty()) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 创建空的分页结果
+     */
+    private ClientPageTableRet createEmptyResult() {
+        ClientPageTableRet result = new ClientPageTableRet();
+        result.setRows(Collections.emptyList());
+        result.setTotal(0);
+        return result;
+    }
+}

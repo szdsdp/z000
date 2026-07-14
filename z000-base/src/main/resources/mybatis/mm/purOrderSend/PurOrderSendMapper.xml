@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.purOrderSend.PurOrderSendMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.purOrderSend.PurOrderSend" id="Result">
+        <result property="id" column="id"/>
+        <result property="dtype" column="dtype"/>
+        <result property="ebeln" column="ebeln"/>
+        <result property="ebelp" column="ebelp"/>
+        <result property="bukrs" column="bukrs"/>
+        <result property="bstyp" column="bstyp"/>
+        <result property="bsart" column="bsart"/>
+        <result property="loekz" column="loekz"/>
+        <result property="statu" column="statu"/>
+        <result property="aedat" column="aedat"/>
+        <result property="ernam" column="ernam"/>
+        <result property="lifnr" column="lifnr"/>
+        <result property="name1" column="name1"/>
+        <result property="spras" column="spras"/>
+        <result property="zterm" column="zterm"/>
+        <result property="ekorg" column="ekorg"/>
+        <result property="ekgrp" column="ekgrp"/>
+        <result property="waers" column="waers"/>
+        <result property="wkurs" column="wkurs"/>
+        <result property="bedat" column="bedat"/>
+        <result property="kdatb" column="kdatb"/>
+        <result property="txz01" column="txz01"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="maktx" column="maktx"/>
+        <result property="fact" column="fact"/>
+        <result property="matkl" column="matkl"/>
+        <result property="infnr" column="infnr"/>
+        <result property="menge" column="menge"/>
+        <result property="unit" column="unit"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_pur_order_send
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ ebeln = ebeln @E@
+            AND @S@ lifnr = lifnr @E@
+            AND @S@ name1 = name1 @E@
+            AND @S@ mtl_code = mtlCode @E@
+            AND @S@ fact = fact @E@
+            AND @S@ bukrs = bukrs @E@
+            AND @S@ bedat = bedat @E@
+            AND @S@ aedat = aedat @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY id DESC
+        </if>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_mm_pur_order_send (dtype, ebeln, ebelp, bukrs, bstyp, bsart, loekz, statu,
+                                       aedat, ernam, lifnr, name1, spras, zterm, ekorg, ekgrp,
+                                       waers, wkurs, bedat, kdatb, txz01, mtl_code, maktx, fact,
+                                       matkl, infnr, menge, unit)
+        VALUES (#{dtype}, #{ebeln}, #{ebelp}, #{bukrs}, #{bstyp}, #{bsart}, #{loekz}, #{statu},
+                #{aedat}, #{ernam}, #{lifnr}, #{name1}, #{spras}, #{zterm}, #{ekorg}, #{ekgrp},
+                #{waers}, #{wkurs}, #{bedat}, #{kdatb}, #{txz01}, #{mtlCode}, #{maktx}, #{fact},
+                #{matkl}, #{infnr}, #{menge}, #{unit})
+    </insert>
+</mapper>

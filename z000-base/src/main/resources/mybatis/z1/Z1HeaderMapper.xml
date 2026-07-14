@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szd.z000.base.orm.mapper.z1.Z1HeaderMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.z1.Z1Header" id="Result">
+        <result property="bussId" column="buss_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="cmpyCreate" column="cmpy_create"/>
+        <result property="cstcCreate" column="cstc_create"/>
+        <result property="userId" column="user_id"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="curr" column="curr"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="title" column="title"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="select">
+        select buss_id,
+               cmpy_create,
+               cstc_create,
+               cmpy,
+               cstc,
+               user_id,
+               curr,
+               buss_date,
+               buss_status,
+               remark,
+               buss_doc_id,
+               bstp,
+               router_code,
+               create_by,
+               create_time,
+               update_by,
+               update_time,
+               remark
+        from z000_header
+    </sql>
+
+    <!-- 查询列表 -->
+    <select id="selectList" parameterType="com.szd.z000.base.orm.domain.z1.Z1Header" resultMap="Result">
+        <include refid="select"/>
+        <where>
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ user_id = userId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ bstp = bstp @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ create_time = createTime @E@
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ title = title @E@
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 查询详情 -->
+    <select id="selectById" parameterType="String" resultMap="Result">
+        <include refid="select"/>
+        where buss_id = #{bussId}
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insert" parameterType="com.szd.z000.base.orm.domain.z1.Z1Header">
+        insert into z000_header (buss_id, cmpy_create, cstc_create, cmpy, cstc, user_id, curr, buss_date, buss_status,
+                                 remark, buss_doc_id, bstp, router_code, create_by, create_time)
+        values (#{bussId}, #{cmpyCreate}, #{cstcCreate}, #{cmpy}, #{cstc}, #{userId}, #{curr}, #{bussDate},
+                #{bussStatus}, #{remark}, #{bussDocId}, #{bstp}, #{routerCode}, #{createBy},
+                #{createTime})
+    </insert>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="com.szd.z000.base.orm.domain.z1.Z1Header">
+        update z000_header
+        set cmpy_create  = #{cmpyCreate},
+            cstc_create  = #{cstcCreate},
+            cmpy         = #{cmpy},
+            cstc         = #{cstc},
+            user_id      = #{userId},
+            curr         = #{curr},
+            buss_date    = #{bussDate},
+            buss_status  = #{bussStatus},
+            remark       = #{remark},
+            buss_doc_id  = #{bussDocId},
+            bstp         = #{bstp},
+            router_code  = #{routerCode},
+            update_by    = #{updateBy},
+            update_time  = #{updateTime}
+        where buss_id = #{bussId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        update z000_header
+        set buss_status = #{bussStatus}
+        <if test="bussDocId != null and bussDocId != ''">, buss_doc_id = #{bussDocId}</if>
+        where buss_id = #{bussId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="deleteById" parameterType="String">
+        delete
+        from z000_header
+        where buss_id = #{bussId}
+    </delete>
+
+</mapper>

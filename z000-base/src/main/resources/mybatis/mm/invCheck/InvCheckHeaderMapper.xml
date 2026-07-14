@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.invCheck.InvCheckHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.invCheck.InvCheckHeader" id="Result">
+        <result property="invId" column="inv_id"/>
+        <result property="vchDate" column="vch_date"/>
+        <result property="postDate" column="post_date"/>
+        <result property="curr" column="curr"/>
+        <result property="invAmt" column="inv_amt"/>
+        <result property="terms" column="terms"/>
+        <result property="blineDate" column="bline_date"/>
+        <result property="payWay" column="pay_way"/>
+        <result property="storeBussDocId" column="store_buss_doc_id"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="reBelnr" column="re_belnr"/>
+        <result property="reGjahr" column="re_gjahr"/>
+        <result property="bukrs" column="bukrs"/>
+        <result property="belnr" column="belnr"/>
+        <result property="gjahr" column="gjahr"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="revReBelnr" column="rev_re_belnr"/>
+        <result property="revReGjahr" column="rev_re_gjahr"/>
+        <result property="revBelnr" column="rev_belnr"/>
+        <result property="revGjahr" column="rev_gjahr"/>
+        <result property="revSapMsg" column="rev_sap_msg"/>
+        <result property="revSapMessId" column="rev_sap_mess_id"/>
+        <result property="fileObjId" column="file_obj_id"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_mm_inv_check_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @
+            OS
+            orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql"/>
+        where inv_id = #{invId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_mm_inv_check_header (inv_id, buss_doc_id, vch_date, post_date,
+                                              curr, inv_amt, terms, bline_date,
+                                              pay_way, store_buss_doc_id,
+                                              buss_date, buss_status, bstp, router_code, title, remark, cmpy, cstc,
+                                              create_by, create_time, file_obj_id)
+        VALUES (#{invId}, #{bussDocId}, #{vchDate}, #{postDate},
+                #{curr}, #{invAmt}, #{terms}, #{blineDate},
+                #{payWay}, #{storeBussDocId},
+                #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark}, #{cmpy}, #{cstc},
+                #{createBy}, #{createTime}, #{fileObjId})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_mm_inv_check_header
+        SET vch_date          = #{vchDate},
+            post_date         = #{postDate},
+            curr              = #{curr},
+            inv_amt           = #{invAmt},
+            terms             = #{terms},
+            bline_date        = #{blineDate},
+            pay_way           = #{payWay},
+            store_buss_doc_id = #{storeBussDocId},
+            buss_doc_id       = #{bussDocId},
+            buss_date         = #{bussDate},
+            bstp              = #{bstp},
+            router_code       = #{routerCode},
+            title             = #{title},
+            remark            = #{remark},
+            cmpy              = #{cmpy},
+            cstc              = #{cstc},
+            update_by         = #{updateBy},
+            update_time       = #{updateTime},
+            file_obj_id       = #{fileObjId}
+        where inv_id = #{invId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_mm_inv_check_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE inv_id = #{invId}
+    </update>
+
+    <update id="updateSapRet">
+        update z000_mm_inv_check_header
+        <set>
+            <if test="reBelnr != null and reBelnr != ''">
+                buss_status
+                = 'F',
+                re_belnr =
+                #{reBelnr},
+            </if>
+            <if test="reGjahr != null and reGjahr != ''">
+                re_gjahr
+                =
+                #{reGjahr},
+            </if>
+            <if test="bukrs != null and bukrs != ''">
+                bukrs
+                =
+                #{bukrs},
+            </if>
+            <if test="belnr != null and belnr != ''">
+                belnr
+                =
+                #{belnr},
+            </if>
+            <if test="gjahr != null and gjahr != ''">
+                gjahr
+                =
+                #{gjahr},
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg
+                =
+                #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id
+                =
+                #{sapMessId},
+            </if>
+        </set>
+        where inv_id = #{invId}
+    </update>
+
+    <update id="updateReverseSapRet">
+        update z000_mm_inv_check_header
+        <set>
+            <if test="revReBelnr != null and revReBelnr != ''">
+                rev_re_belnr
+                =
+                #{revReBelnr},
+            </if>
+            <if test="revReGjahr != null and revReGjahr != ''">
+                rev_re_gjahr
+                =
+                #{revReGjahr},
+            </if>
+            <if test="revBelnr != null and revBelnr != ''">
+                rev_belnr
+                =
+                #{revBelnr},
+            </if>
+            <if test="revGjahr != null and revGjahr != ''">
+                rev_gjahr
+                =
+                #{revGjahr},
+            </if>
+            <if test="revSapMsg != null and revSapMsg != ''">
+                rev_sap_msg
+                =
+                #{revSapMsg},
+            </if>
+            <if test="revSapMessId != null and revSapMessId != ''">
+                rev_sap_mess_id
+                =
+                #{revSapMessId},
+            </if>
+        </set>
+        where inv_id = #{invId}
+    </update>
+
+    <select id="selectByStoreBussDocId" parameterType="string" resultMap="Result">
+        <include refid="selectSql"/>
+        where store_buss_doc_id = #{storeBussDocId}
+    </select>
+
+    <select id="countByStoreBussDocId" resultType="int">
+        select count(1) from z000_mm_inv_check_header
+        where store_buss_doc_id = #{storeBussDocId}
+        <choose>
+            <when test="bussStatus == '!E'">and buss_status != 'E'</when>
+            <otherwise>and buss_status = #{bussStatus}</otherwise>
+        </choose>
+    </select>
+
+    <select id="sumAmtByStoreBussDocId" resultType="java.math.BigDecimal">
+        select coalesce(sum(inv_amt), 0) from z000_mm_inv_check_header
+        where store_buss_doc_id = #{storeBussDocId}
+        <choose>
+            <when test="bussStatus == '!E'">and buss_status != 'E'</when>
+            <otherwise>and buss_status = #{bussStatus}</otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteById">
+        DELETE
+        FROM z000_mm_inv_check_header
+        WHERE inv_id = #{invId}
+    </delete>
+</mapper>

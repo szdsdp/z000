@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.saleDelivery.SaleDeliveryHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.saleDelivery.SaleDeliveryHeader" id="Result">
+        <result property="deliveryId" column="delivery_id"/>
+        <result property="shipPoint" column="ship_point"/>
+        <result property="deliveryDeadline" column="delivery_deadline"/>
+        <result property="vbeln" column="vbeln"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_sd_sale_delivery_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where delivery_id = #{deliveryId}
+    </select>
+
+    <select id="selectByVbeln" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where vbeln = #{vbeln}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_sd_sale_delivery_header (delivery_id, buss_doc_id, ship_point, delivery_deadline,
+                                         buss_date, buss_status, bstp, router_code, title, remark, cmpy, cstc,
+                                         create_by, create_time)
+        VALUES (#{deliveryId}, #{bussDocId}, #{shipPoint}, #{deliveryDeadline},
+                #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark}, #{cmpy}, #{cstc},
+                #{createBy}, #{createTime})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_sd_sale_delivery_header
+        SET
+            ship_point          = #{shipPoint},
+            delivery_deadline   = #{deliveryDeadline},
+            buss_doc_id         = #{bussDocId},
+            buss_date           = #{bussDate},
+            bstp                = #{bstp},
+            router_code         = #{routerCode},
+            title               = #{title},
+            remark              = #{remark},
+            cmpy                = #{cmpy},
+            cstc                = #{cstc},
+            update_by           = #{updateBy},
+            update_time         = #{updateTime}
+        where delivery_id = #{deliveryId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_sd_sale_delivery_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE delivery_id = #{deliveryId}
+    </update>
+
+    <update id="updateSapRet">
+        update z000_sd_sale_delivery_header
+        <set>
+            <if test="vbeln != null and vbeln != ''">
+                buss_status = 'F',
+                vbeln = #{vbeln},
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where delivery_id = #{deliveryId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_sd_sale_delivery_header WHERE delivery_id = #{deliveryId}
+    </delete>
+</mapper>

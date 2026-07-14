@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.cust.MdmCustHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.cust.MdmCustHeader" id="Result">
+        <result property="applyId" column="apply_id"/>
+        <result property="custFlagDB" column="cust_flag"/>
+        <result property="custId" column="cust_id"/>
+        <result property="custName" column="cust_name"/>
+        <result property="custNameShort" column="cust_name_short"/>
+        <result property="custGrp" column="cust_grp"/>
+        <result property="partnerType" column="partner_type"/>
+        <result property="u8Code" column="u8_code"/>
+        <result property="ctry" column="ctry"/>
+        <result property="province" column="province"/>
+        <result property="provinceCore" column="province_core"/>
+        <result property="city" column="city"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="contact" column="contact"/>
+        <result property="taxType" column="tax_type"/>
+        <result property="idNum" column="id_num"/>
+        <result property="riskClass" column="risk_class"/>
+        <result property="taxClass" column="tax_class"/>
+
+        <result property="fileObjId" column="file_obj_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="creditFlag" column="credit_flag"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="partStartDate" column="part_start_date"/>
+        <result property="partEndDate" column="part_end_date"/>
+        <result property="postCode" column="post_code"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mdm_cust_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ cust_id = custId @E@
+            AND @S@ cust_name = custName @E@
+            AND @S@ cust_grp = custGrp @E@
+            AND @S@ partner_type = partnerType @E@
+            AND @S@ u8_code = u8Code @E@
+            AND @S@ risk_class = riskClass @E@
+            AND @S@ province = province @E@
+            AND @S@ city = city @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+       <include refid="selectSql" />
+        where apply_id = #{applyId}
+    </select>
+    <insert id="insert">
+        INSERT INTO z000_mdm_cust_header (apply_id, cust_flag, cust_id, cust_name, cust_name_short, cust_grp,
+                                          partner_type, u8_code, ctry, province, province_core, city,
+                                          address, phone, contact, tax_type, id_num, risk_class, tax_class,
+                                          file_obj_id, buss_doc_id, buss_date, buss_status, bstp, router_code, title,
+                                          remark, cmpy, cstc, credit_flag, create_by, create_time, part_start_date,
+                                          part_end_date,post_code)
+        VALUES (#{applyId}, #{custFlagDB}, #{custId}, #{custName}, #{custNameShort}, #{custGrp}, #{partnerType},
+                #{u8Code}, #{ctry}, #{province}, #{provinceCore}, #{city},
+                #{address}, #{phone}, #{contact}, #{taxType}, #{idNum}, #{riskClass}, #{taxClass},
+                #{fileObjId}, #{bussDocId}, #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark},
+                #{cmpy}, #{cstc}, #{creditFlag}, #{createBy}, #{createTime}, #{partStartDate}, #{partEndDate},#{postCode})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_mdm_cust_header
+        SET cust_flag       = #{custFlagDB},
+            cust_id         = #{custId},
+            cust_name       = #{custName},
+            cust_name_short = #{custNameShort},
+            cust_grp        = #{custGrp},
+            partner_type    = #{partnerType},
+            u8_code         = #{u8Code},
+            ctry            = #{ctry},
+            province        = #{province},
+            province_core   = #{provinceCore},
+            city            = #{city},
+            address         = #{address},
+            phone           = #{phone},
+            contact         = #{contact},
+            tax_type        = #{taxType},
+            id_num          = #{idNum},
+            risk_class      = #{riskClass},
+            tax_class       = #{taxClass},
+            file_obj_id     = #{fileObjId},
+            buss_doc_id     = #{bussDocId},
+            buss_date       = #{bussDate},
+            bstp            = #{bstp},
+            router_code     = #{routerCode},
+            title           = #{title},
+            remark          = #{remark},
+            credit_flag     = #{creditFlag},
+            update_by       = #{updateBy},
+            update_time     = #{updateTime},
+            part_start_date = #{partStartDate},
+            part_end_date   = #{partEndDate},
+            post_code       =#{postCode}
+        where apply_id = #{applyId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_mdm_cust_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <update id="updateCustId">
+        update z000_mdm_cust_header
+        <set>
+            <if test="custId != null and custId != ''">
+                cust_id = #{custId},
+                buss_status = 'F',
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where apply_id = #{applyId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_mdm_cust_header WHERE apply_id = #{applyId}
+    </delete>
+</mapper>

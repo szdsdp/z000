@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.saleOrder.SaleOrderSchedMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.saleOrder.SaleOrderSched" id="Result">
+        <id property="orderId" column="order_id"/>
+        <id property="itemNo" column="item_no"/>
+        <id property="schedNo" column="sched_no"/>
+        <result property="reqDate" column="req_date"/>
+        <result property="reqQty" column="req_qty"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_sd_sale_order_sched
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where order_id = #{orderId}
+        order by item_no, sched_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_sd_sale_order_sched (order_id, item_no, sched_no, req_date, req_qty)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderId}, #{item.itemNo}, #{item.schedNo}, #{item.reqDate}, #{item.reqQty})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByOrderId" parameterType="String">
+        delete from z000_sd_sale_order_sched where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteByOrderIdAndItemNo">
+        delete from z000_sd_sale_order_sched where order_id = #{orderId} and item_no = #{itemNo}
+    </delete>
+</mapper>

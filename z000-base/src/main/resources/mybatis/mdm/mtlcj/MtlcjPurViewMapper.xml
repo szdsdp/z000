@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.mtlcj.MtlcjPurViewMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.mtlcj.MtlcjPurView" id="Result">
+        <result property="applyId" column="apply_id"/>
+        <result property="fact" column="fact"/>
+        <result property="abcId" column="abc_id"/>
+        <result property="purGroup" column="pur_group"/>
+        <result property="issueUnit" column="issue_unit"/>
+        <result property="safetyStk" column="safety_stk"/>
+        <result property="minLotsize" column="min_lotsize"/>
+        <result property="maxLotsize" column="max_lotsize"/>
+        <result property="fixedLot" column="fixed_lot"/>
+        <result property="roundVal" column="round_val"/>
+        <result property="maxStock" column="max_stock"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mdm_mtlcj_pur_view
+    </sql>
+
+    <select id="selectByApplyId" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where apply_id = #{applyId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_mdm_mtlcj_pur_view (apply_id, fact, abc_id, pur_group, issue_unit,
+                                              safety_stk, min_lotsize, max_lotsize, fixed_lot, round_val, max_stock)
+        VALUES (#{applyId}, #{fact}, #{abcId}, #{purGroup}, #{issueUnit},
+                #{safetyStk}, #{minLotsize}, #{maxLotsize}, #{fixedLot}, #{roundVal}, #{maxStock})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_mdm_mtlcj_pur_view
+        SET fact        = #{fact},
+            abc_id      = #{abcId},
+            pur_group   = #{purGroup},
+            issue_unit  = #{issueUnit},
+            safety_stk  = #{safetyStk},
+            min_lotsize = #{minLotsize},
+            max_lotsize = #{maxLotsize},
+            fixed_lot   = #{fixedLot},
+            round_val   = #{roundVal},
+            max_stock   = #{maxStock}
+        where apply_id = #{applyId}
+    </update>
+
+    <delete id="deleteByApplyId">
+        DELETE FROM z000_mdm_mtlcj_pur_view WHERE apply_id = #{applyId}
+    </delete>
+</mapper>

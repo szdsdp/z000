@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.purApply.PurApplyHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.purApply.PurApplyHeader" id="Result">
+        <result property="applyId" column="apply_id"/>
+        <result property="applyType" column="apply_type"/>
+        <result property="applyNo" column="apply_no"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="fileObjId" column="file_obj_id"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_pur_apply_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ apply_no = applyNo @E@
+            AND @S@ apply_type = applyType @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where apply_id = #{applyId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_mm_pur_apply_header (apply_id, apply_type, apply_no,
+                                         buss_doc_id, cmpy, buss_date, buss_status, bstp, router_code, title, remark, cstc,
+                                         create_by, create_time, file_obj_id)
+        VALUES (#{applyId}, #{applyType}, #{applyNo},
+                #{bussDocId}, #{cmpy}, #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark}, #{cstc},
+                #{createBy}, #{createTime}, #{fileObjId})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_mm_pur_apply_header
+        SET apply_type     = #{applyType},
+            buss_doc_id    = #{bussDocId},
+            cmpy           = #{cmpy},
+            buss_date      = #{bussDate},
+            bstp           = #{bstp},
+            router_code    = #{routerCode},
+            title          = #{title},
+            remark         = #{remark},
+            update_by      = #{updateBy},
+            update_time    = #{updateTime},
+            file_obj_id    = #{fileObjId}
+        where apply_id = #{applyId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_mm_pur_apply_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <update id="updateApplyNo">
+        update z000_mm_pur_apply_header
+        <set>
+            <if test="applyNo != null and applyNo != ''">
+                apply_no = #{applyNo},
+                buss_status = 'F',
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where apply_id = #{applyId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_mm_pur_apply_header WHERE apply_id = #{applyId}
+    </delete>
+</mapper>

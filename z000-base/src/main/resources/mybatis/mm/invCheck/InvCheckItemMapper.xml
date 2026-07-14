@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.invCheck.InvCheckItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.invCheck.InvCheckItem" id="Result">
+        <id property="invId" column="inv_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="orderItemNo" column="order_item_no"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="mtlName" column="mtl_name"/>
+        <result property="taxCode" column="tax_code"/>
+        <result property="amt" column="amt"/>
+        <result property="taxAmount" column="tax_amount"/>
+        <result property="quantity" column="quantity"/>
+        <result property="unit" column="unit"/>
+        <result property="itemText" column="item_text"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_inv_check_item
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where inv_id = #{invId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mm_inv_check_item (inv_id, item_no, order_no, order_item_no,
+                                       mtl_code, mtl_name, tax_code, amt, tax_amount, quantity, unit, item_text)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.invId}, #{item.itemNo}, #{item.orderNo}, #{item.orderItemNo},
+             #{item.mtlCode}, #{item.mtlName}, #{item.taxCode}, #{item.amt}, #{item.taxAmount}, #{item.quantity}, #{item.unit}, #{item.itemText})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByInvCheckId" parameterType="String">
+        delete from z000_mm_inv_check_item where inv_id = #{invId}
+    </delete>
+
+    <select id="countByPoNumberAndPoItem" resultType="java.math.BigDecimal">
+        select coalesce(sum(i.quantity), 0)
+        from z000_mm_inv_check_item i
+                 left join z000_mm_inv_check_header h on h.inv_id = i.inv_id
+        where i.order_no = #{orderNo}
+          and i.order_item_no = #{orderItemNo}
+          and h.buss_status != 'E'
+        <if test="excludeInvId != null and excludeInvId != ''">
+          and i.inv_id != #{excludeInvId}
+        </if>
+    </select>
+</mapper>

@@ -1,10 +1,10 @@
-数字化平台Z000
+数字化平台-模板项目-Z000
 ===============
-当前最新版本： 1.0.0（发布时间：2024-01-03）
+当前最新版本： 2.1.0（发布时间：2026-5-10）
 
 [![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)]()
-[![](https://img.shields.io/badge/Author-尚智得-orange.svg)](https://www.szdsoft.cn/about)
-[![](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://gitee.com/szdsdp/demo)
+[![](https://img.shields.io/badge/Author-河北尚智得-orange.svg)](https://www.szdsoft.cn/about)
+[![](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://gitee.com/szdsdp/demo)
 
 ## 项目介绍
 
@@ -27,21 +27,21 @@
 
 ## 平台体验
 
-- 官方网站： [https://www.szdsoft.cn](https://www.szdsoft.cn)
-- 在线文档：[https://www.szdsoft.cn/platform/onlineApi/overview](https://www.szdsoft.cn/platform/onlineApi/overview)
-- 在线演示 ：  [https://sdp.szdsoft.cn:81](https://sdp.szdsoft.cn:81) 
+- 官方网站：[https://www.szdsoft.cn](https://www.szdsoft.cn)
+- 在线文档：[https://www.szdsoft.cn/platform/onlineApi/overview](https://szdsoft.cn/platform/online-api/overview)
+- 在线演示：[https://sdp.szdsoft.cn:81](https://sdp.szdsoft.cn:81) 
 
-> 演示系统的登录账号密码：admin/Szd202*4
+> 演示系统的登录账号密码：admin/2025
 
 ## 技术支持
 
-使用中遇到问题或者BUG可以在 [Gitee上提Issues](https://gitee.com/szdsdp/z000/issues)
+使用中遇到问题或者BUG可以在Github上提 [Issues](https://github.com/szdsdp/z000/issues)
 
 ## 源码下载
 
-- 后台项目 ：https://gitee.com/szdsdp/z000
-- 前端项目 ：https://gitee.com/szdsdp/z000-web
-- 前端组件库项目 ：https://gitee.com/szdsdp/client-web
+- 后台源码 ：https://github.com/szdsdp/z000
+- 前端源码 ：https://github.com/szdsdp/z000-web
+- 手机端源码 ：https://github.com/szdsdp/z000-app
 
 ## 技术选型
 
@@ -248,31 +248,3 @@
    └─请查看生态体验版
    
 ```
-
-## 系统效果
-- 系统登录
-![系统登录](https://www.szdsoft.cn/gitee/git-login.png)
-- 系统首页
-![系统首页](https://www.szdsoft.cn/gitee/git-home.png)
-- 我的已办
-![我的已办](https://www.szdsoft.cn/gitee/git-done.png)
-- 任务池总待办
-![任务池总待办](https://www.szdsoft.cn/gitee/git-todos.png)
-- 主数据
-![主数据](https://www.szdsoft.cn/gitee/git-mdm.png)
-- 基础配置
-![基础配置](https://www.szdsoft.cn/gitee/git-basic.png)
-- 流程引擎
-![流程引擎](https://www.szdsoft.cn/gitee/git-workflow.png)
-- 定时任务
-![定时任务](https://www.szdsoft.cn/gitee/git-task.png)
-- 集成监控
-![集成监控](https://www.szdsoft.cn/gitee/git-mond.png)
-- 知识库
-![知识库](https://www.szdsoft.cn/gitee/git-skis.png)
-- 电子影像
-![电子影像](https://www.szdsoft.cn/gitee/git-seis.png)
-- 附件清单
-![附件清单](https://www.szdsoft.cn/gitee/git-files.png)
-- 多语言
-![多语言](https://www.szdsoft.cn/gitee/git-en.png) 

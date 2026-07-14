@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.demo.mdm.MdmCmpyMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.demo.mdm.MdmCmpy" id="cmpyResult">
+        <result property="userId" column="user_id"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cmpyName" column="cmpy_name"/>
+        <result property="cmpyShort" column="cmpy_short"/>
+        <result property="accSet" column="acc_set"/>
+    </resultMap>
+
+    <sql id="selectMasterCompanyVo">
+        select cmpy, cmpy_name, cmpy_short, acc_set from z000_mdm_cmpy
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.z000.base.orm.domain.demo.mdm.MdmCmpy" resultMap="cmpyResult">
+        <include refid="selectMasterCompanyVo"/>
+        <where>
+            @S@ cmpy = cmpy @E@
+            and @S@ cmpy_name = cmpyName @E@
+            and @S@ cmpy_short = cmpyShort @E@
+            and @S@ acc_set = accSet @E@
+        </where>
+        order by cmpy
+    </select>
+
+    <select id="selectById" parameterType="String" resultMap="cmpyResult">
+        <include refid="selectMasterCompanyVo"/>
+        where cmpy = #{cmpy}
+    </select>
+
+    <select id="selectCmpyCommonList" resultMap="cmpyResult">
+        select h.user_id, c.cmpy, c.cmpy_name
+        from z000_mdm_cmpy c
+        join (select user_id,field_code from core_mdm_sh where user_id = #{userId} and base_field =
+        'cmpy') h on c.cmpy = h.field_code
+        <where>
+            <if test="cmpy != null  and cmpy != ''">and c.cmpy like concat('%', #{cmpy},
+                '%')
+            </if>
+            <if test="cmpyName != null  and cmpyName != ''">and c.cmpy_name like concat('%', #{cmpyName},
+                '%')
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.szd.z000.base.orm.domain.demo.mdm.MdmCmpy">
+        insert into z000_mdm_cmpy (cmpy, cmpy_name, cmpy_short, acc_set)
+        values (#{cmpy}, #{cmpyName}, #{cmpyShort}, #{accSet})
+    </insert>
+
+    <update id="update" parameterType="com.szd.z000.base.orm.domain.demo.mdm.MdmCmpy">
+        update z000_mdm_cmpy
+        set cmpy_name = #{cmpyName},
+            cmpy_short = #{cmpyShort},
+            acc_set = #{accSet}
+        where cmpy = #{cmpy}
+    </update>
+
+    <delete id="deleteByIds" parameterType="String">
+        delete from z000_mdm_cmpy where cmpy in
+        <foreach item="cmpy" collection="array" open="(" separator="," close=")">
+            #{cmpy}
+        </foreach>
+    </delete>
+</mapper>

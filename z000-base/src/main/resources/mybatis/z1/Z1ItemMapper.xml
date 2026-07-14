@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.szd.z000.base.orm.mapper.z1.Z1ItemMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.z1.Z1Item" id="Result">
+        <result property="bussId" column="buss_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="bsub" column="bsub"/>
+        <result property="accs" column="accs"/>
+        <result property="taxr" column="taxr"/>
+        <result property="amt" column="amt"/>
+        <result property="amtNoTax" column="amt_notax"/>
+        <result property="amtTax" column="amt_tax"/>
+        <result property="supp" column="supp"/>
+        <result property="cust" column="cust"/>
+        <result property="sgl" column="sgl"/>
+        <result property="summary" column="summary"/>
+        <result property="cstc" column="cstc"/>
+        <result property="prfc" column="prfc"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="select">
+        select * from z000_item
+    </sql>
+
+    <!-- 查询列表 -->
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="select"/>
+        where buss_id = #{bussId}
+    </select>
+
+    <!-- 批量新增 -->
+    <insert id="batchInsert" >
+        insert into z000_item (
+        buss_id, item_no, bsub, accs, taxr, amt, amt_notax, amt_tax, supp, cust, sgl, summary, cstc, prfc, remark
+        ) values
+        <foreach collection="list" separator="," item="item">
+            (
+            #{item.bussId}, #{item.itemNo}, #{item.bsub}, #{item.accs}, #{item.taxr}, #{item.amt},
+            #{item.amtNoTax}, #{item.amtTax}, #{item.supp}, #{item.cust}, #{item.sgl}, #{item.summary},
+             #{item.cstc}, #{item.prfc}, #{item.remark}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 批量删除 -->
+    <delete id="deleteByBussId" parameterType="String">
+        delete
+        from z000_item
+        where buss_id = #{bussId}
+    </delete>
+
+</mapper>

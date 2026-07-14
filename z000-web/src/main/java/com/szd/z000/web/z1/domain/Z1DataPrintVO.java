@@ -1,7 +1,7 @@
 package com.szd.z000.web.z1.domain;
 
-import com.szd.z000.orm.domain.z1.Z1Header;
-import com.szd.z000.orm.domain.z1.Z1Item;
+import com.szd.z000.base.orm.domain.z1.Z1Header;
+import com.szd.z000.base.orm.domain.z1.Z1Item;
 import lombok.Data;
 
 import java.util.List;

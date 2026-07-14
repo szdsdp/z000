@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.cust.MdmCustSaleMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.cust.MdmCustSale" id="Result">
+        <id property="applyId" column="apply_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="saleOrg" column="sale_org"/>
+        <result property="vtweg" column="vtweg"/>
+        <result property="spart" column="spart"/>
+        <result property="curr" column="curr"/>
+        <result property="priceTax" column="price_tax"/>
+        <result property="custClass" column="cust_class"/>
+        <result property="custClassSub" column="cust_class_sub"/>
+        <result property="payTerms" column="pay_terms"/>
+        <result property="accsGrp" column="accs_grp"/>
+        <result property="incoterms" column="incoterms"/>
+        <result property="incoterms1" column="incoterms1"/>
+        <result property="saleDept" column="sale_dept"/>
+        <result property="saleRegion" column="sale_region"/>
+        <result property="shippingTerms" column="shipping_terms"/>
+        <result property="creditCtrlArea" column="credit_ctrl_area"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_mdm_cust_sale
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where apply_id = #{applyId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mdm_cust_sale (apply_id, item_no, sale_org, vtweg, spart, curr, price_tax, cust_class, cust_class_sub,
+        pay_terms, accs_grp, incoterms, incoterms1, sale_dept, sale_region, shipping_terms, credit_ctrl_area)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.applyId}, #{item.itemNo}, #{item.saleOrg}, #{item.vtweg}, #{item.spart}, #{item.curr}, #{item.priceTax}, #{item.custClass},
+            #{item.custClassSub}, #{item.payTerms}, #{item.accsGrp}, #{item.incoterms}, #{item.incoterms1}, #{item.saleDept},
+            #{item.saleRegion}, #{item.shippingTerms}, #{item.creditCtrlArea}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteById" parameterType="String">
+        delete
+        from z000_mdm_cust_sale
+        where apply_id = #{applyId}
+    </delete>
+</mapper>

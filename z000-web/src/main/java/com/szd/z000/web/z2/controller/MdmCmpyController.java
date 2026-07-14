@@ -1,12 +1,11 @@
 package com.szd.z000.web.z2.controller;
 
 import com.szd.core.client.ClientCore;
-import com.szd.core.client.constants.ClientConstMdm;
 import com.szd.core.client.domain.common.ClientAjaxResult;
 import com.szd.core.client.domain.common.ClientPageTableRet;
 import com.szd.core.client.service.ClientBaseController;
 import com.szd.core.client.util.ClientUtilString;
-import com.szd.z000.orm.domain.z2.MdmCmpy;
+import com.szd.z000.base.orm.domain.z2.MdmCmpy;
 import com.szd.z000.web.z2.service.MdmCmpyService;
 import org.springframework.web.bind.annotation.*;
 

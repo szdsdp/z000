@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.mtlStock.MtlStockMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.mtlStock.MtlStock" id="Result">
+        <result property="matnr" column="matnr"/>
+        <result property="maktx" column="maktx"/>
+        <result property="werks" column="werks"/>
+        <result property="lgort" column="lgort"/>
+        <result property="labst" column="labst"/>
+        <result property="speme" column="speme"/>
+        <result property="unit" column="unit"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_mtl_stock
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ matnr = matnr @E@
+            AND @S@ werks = werks @E@
+            AND @S@ lgort = lgort @E@
+            AND @S@ maktx = maktx @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY matnr
+        </if>
+    </select>
+
+    <insert id="batchUpsert">
+        insert into z000_mm_mtl_stock (matnr, maktx, werks, lgort, labst, speme, unit, create_by, create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.matnr}, #{item.maktx}, #{item.werks}, #{item.lgort}, #{item.labst}, #{item.speme}, #{item.unit}, #{item.createBy}, #{item.createTime})
+        </foreach>
+        on duplicate key update
+            maktx = values(maktx),
+            labst = values(labst),
+            speme = values(speme),
+            unit = values(unit),
+            create_by = values(create_by),
+            create_time = values(create_time)
+    </insert>
+</mapper>

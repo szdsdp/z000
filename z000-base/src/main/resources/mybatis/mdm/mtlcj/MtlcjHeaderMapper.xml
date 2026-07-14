@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.mtlcj.MtlcjHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.mtlcj.MtlcjHeader" id="Result">
+        <result property="applyId" column="apply_id"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="mtlName" column="mtl_name"/>
+        <result property="indSector" column="ind_sector"/>
+        <result property="mtlType" column="mtl_type"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mdm_mtlcj_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ mtl_code = mtlCode @E@
+            AND @S@ mtl_type = mtlType @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where apply_id = #{applyId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_mdm_mtlcj_header (apply_id, mtl_code, mtl_name,
+                                            ind_sector, mtl_type,
+                                            buss_doc_id, buss_date, buss_status, bstp, router_code, title, remark,
+                                            create_by, create_time)
+        VALUES (#{applyId}, #{mtlCode}, #{mtlName},
+                #{indSector}, #{mtlType},
+                #{bussDocId}, #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark},
+                #{createBy}, #{createTime})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_mdm_mtlcj_header
+        SET mtl_name       = #{mtlName},
+            ind_sector     = #{indSector},
+            mtl_type       = #{mtlType},
+            buss_doc_id    = #{bussDocId},
+            buss_date      = #{bussDate},
+            bstp           = #{bstp},
+            router_code    = #{routerCode},
+            title          = #{title},
+            remark         = #{remark},
+            update_by      = #{updateBy},
+            update_time    = #{updateTime}
+        where apply_id = #{applyId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_mdm_mtlcj_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <update id="updateMtlCode">
+        update z000_mdm_mtlcj_header
+        <set>
+            <if test="mtlCode != null and mtlCode != ''">
+                mtl_code = #{mtlCode},
+                buss_status = 'F',
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where apply_id = #{applyId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_mdm_mtlcj_header WHERE apply_id = #{applyId}
+    </delete>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.cust.MdmCustPurchaseMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.cust.MdmCustPurchase" id="Result">
+        <id property="applyId" column="apply_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="purchaseOrg" column="purchase_org"/>
+        <result property="curr" column="curr"/>
+        <result property="payTerms" column="pay_terms"/>
+        <result property="dealType" column="deal_type"/>
+        <result property="contact" column="contact"/>
+        <result property="contactPhone" column="contact_phone"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_mdm_cust_purchase
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where apply_id = #{applyId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mdm_cust_purchase (apply_id, item_no, purchase_org, curr, pay_terms, deal_type, contact, contact_phone)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.applyId}, #{item.itemNo}, #{item.purchaseOrg}, #{item.curr}, #{item.payTerms}, #{item.dealType}, #{item.contact}, #{item.contactPhone})
+        </foreach>
+    </insert>
+
+    <delete id="deleteById" parameterType="String">
+        delete
+        from z000_mdm_cust_purchase
+        where apply_id = #{applyId}
+    </delete>
+</mapper>

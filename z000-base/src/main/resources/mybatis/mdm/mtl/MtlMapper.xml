@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.mtl.MtlMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.mtl.Mtl" id="Result">
+        <id property="mtlCode" column="mtl_code"/>
+        <result property="mtlName" column="mtl_name"/>
+        <result property="unit" column="unit"/>
+        <result property="mtlType" column="mtl_type"/>
+        <result property="prodGroup" column="prod_group"/>
+        <result property="mtlGroup" column="mtl_group"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mdm_mtl
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ mtl_code = mtlCode @E@
+            AND @S@ mtl_name = mtlName @E@
+            AND @S@ mtl_type = mtlType @E@
+            AND @S@ mtl_group = mtlGroup @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY mtl_code ASC
+        </if>
+    </select>
+
+    <select id="selectByCodes" resultMap="Result">
+        <include refid="selectSql"/>
+        where mtl_code in
+        <foreach collection="list" item="code" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+    </select>
+
+    <insert id="batchUpsert">
+        insert into z000_mdm_mtl (mtl_code, mtl_name, unit, mtl_type, prod_group, mtl_group)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.mtlCode}, #{item.mtlName}, #{item.unit}, #{item.mtlType}, #{item.prodGroup}, #{item.mtlGroup})
+        </foreach>
+        on duplicate key update
+            mtl_name = values(mtl_name),
+            unit = values(unit),
+            mtl_type = values(mtl_type),
+            prod_group = values(prod_group),
+            mtl_group = values(mtl_group)
+    </insert>
+</mapper>

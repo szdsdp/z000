@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.pp.orderReport.OrderReportItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.pp.orderReport.OrderReportItem" id="Result">
+        <id property="reportId" column="report_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="operation" column="operation"/>
+        <result property="confText" column="conf_text"/>
+        <result property="yield" column="yield"/>
+        <result property="scrap" column="scrap"/>
+        <result property="rework" column="rework"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_pp_order_report_item
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where report_id = #{reportId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_pp_order_report_item (report_id, item_no, operation, conf_text, `yield`, scrap, rework)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.reportId}, #{item.itemNo}, #{item.operation}, #{item.confText}, #{item.yield}, #{item.scrap}, #{item.rework})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByOrderReportId" parameterType="String">
+        delete
+        from z000_pp_order_report_item
+        where report_id = #{reportId}
+    </delete>
+
+    <delete id="deleteByOrderReportIdAndItemNo">
+        delete
+        from z000_pp_order_report_item
+        where report_id = #{reportId}
+          and item_no = #{itemNo}
+    </delete>
+</mapper>

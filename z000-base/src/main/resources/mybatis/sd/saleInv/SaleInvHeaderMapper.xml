@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.saleInv.SaleInvHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.saleInv.SaleInvHeader" id="Result">
+        <result property="invId" column="inv_id"/>
+        <result property="budat" column="budat"/>
+        <result property="docType" column="doc_type"/>
+        <result property="billDoc" column="bill_doc"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="revBillDoc" column="rev_bill_doc"/>
+        <result property="revSapMsg" column="rev_sap_msg"/>
+        <result property="revSapMessId" column="rev_sap_mess_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_sd_sale_inv_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where inv_id = #{invId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_sd_sale_inv_header (inv_id, buss_doc_id, budat, doc_type,
+                                         buss_date, buss_status, bstp, router_code, title, remark, cmpy, cstc,
+                                         sap_msg, sap_mess_id,
+                                         create_by, create_time)
+        VALUES (#{invId}, #{bussDocId}, #{budat}, #{docType},
+                #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark}, #{cmpy}, #{cstc},
+                #{sapMsg}, #{sapMessId},
+                #{createBy}, #{createTime})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_sd_sale_inv_header
+        SET
+            budat               = #{budat},
+            doc_type            = #{docType},
+            buss_doc_id         = #{bussDocId},
+            buss_date           = #{bussDate},
+            bstp                = #{bstp},
+            router_code         = #{routerCode},
+            title               = #{title},
+            remark              = #{remark},
+            sap_msg             = #{sapMsg},
+            sap_mess_id         = #{sapMessId},
+            cmpy                = #{cmpy},
+            cstc                = #{cstc},
+            update_by           = #{updateBy},
+            update_time         = #{updateTime}
+        where inv_id = #{invId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_sd_sale_inv_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE inv_id = #{invId}
+    </update>
+
+    <update id="updateSapRet">
+        update z000_sd_sale_inv_header
+        <set>
+            <if test="billDoc != null and billDoc != ''">
+                buss_status = 'F',
+                bill_doc = #{billDoc},
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where inv_id = #{invId}
+    </update>
+
+    <update id="updateReverseSapRet">
+        update z000_sd_sale_inv_header
+        <set>
+            <if test="revBillDoc != null and revBillDoc != ''">
+                rev_bill_doc = #{revBillDoc},
+            </if>
+            <if test="revSapMsg != null and revSapMsg != ''">
+                rev_sap_msg = #{revSapMsg},
+            </if>
+            <if test="revSapMessId != null and revSapMessId != ''">
+                rev_sap_mess_id = #{revSapMessId},
+            </if>
+        </set>
+        where inv_id = #{invId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_sd_sale_inv_header WHERE inv_id = #{invId}
+    </delete>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.cust.MdmCustBkacMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.cust.MdmCustBkac" id="Result">
+        <id property="applyId" column="apply_id"/>
+        <result property="itemNo" column="item_no"/>
+        <result property="acctNo" column="acct_no"/>
+        <result property="acctName" column="acct_name"/>
+        <result property="cnap" column="cnap"/>
+        <result property="cnapName" column="cnap_name"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select *
+        from z000_mdm_cust_bkac
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where apply_id = #{applyId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mdm_cust_bkac (apply_id, item_no, acct_no, acct_name, cnap, cnap_name)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.applyId}, #{item.itemNo}, #{item.acctNo}, #{item.acctName}, #{item.cnap}, #{item.cnapName})
+        </foreach>
+    </insert>
+
+    <delete id="deleteById" parameterType="String">
+        delete
+        from z000_mdm_cust_bkac
+        where apply_id = #{applyId}
+    </delete>
+</mapper>

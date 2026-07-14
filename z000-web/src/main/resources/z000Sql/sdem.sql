@@ -1,9 +1,9 @@
 
 -- ----------------------------
--- Table structure for z000_header
+-- Table structure for z000_exp_cost_header
 -- ----------------------------
-DROP TABLE IF EXISTS `z000_header`;
-CREATE TABLE `z000_header`  (
+DROP TABLE IF EXISTS `z000_exp_cost_header`;
+CREATE TABLE `z000_exp_cost_header`  (
      `adjust_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '总账ID',
      `buss_doc_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务单号',
      `cstc_create` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '制单人成本中心',
@@ -11,8 +11,8 @@ CREATE TABLE `z000_header`  (
      `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '报账人',
      `supp` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '供应商',
      `cust` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '客户',
-     `cstc_exp` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费用承担成本中心',
-     `cmpy_exp` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费用承担公司',
+     `cstc` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费用承担成本中心',
+     `cmpy` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '费用承担公司',
      `cstc_buss` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务发生成本中心',
      `cmpy_buss` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务发生公司',
      `bstp` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '业务类型',
@@ -35,10 +35,10 @@ CREATE TABLE `z000_header`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = 'SDEM1-抬头' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for z000_item
+-- Table structure for z000_exp_cost_item
 -- ----------------------------
-DROP TABLE IF EXISTS `z000_item`;
-CREATE TABLE `z000_item`  (
+DROP TABLE IF EXISTS `z000_exp_cost_item`;
+CREATE TABLE `z000_exp_cost_item`  (
        `cost_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '费用ID',
        `item_no` int(11) NOT NULL COMMENT '行项目',
        `accs` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '会计科目',

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.pp.orderReport.OrderReportHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.pp.orderReport.OrderReportHeader" id="Result">
+        <result property="reportId" column="report_id"/>
+        <result property="aufnr" column="aufnr"/>
+        <result property="confno" column="confno"/>
+        <result property="confcnt" column="confcnt"/>
+        <result property="revConfcnt" column="rev_confcnt"/>
+        <result property="revSapMsg" column="rev_sap_msg"/>
+        <result property="revSapMessId" column="rev_sap_mess_id"/>
+        <result property="budat" column="budat"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_pp_order_report_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ aufnr = aufnr @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where report_id = #{reportId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_pp_order_report_header (report_id, buss_doc_id, aufnr, confno, confcnt, budat,
+                                           buss_date, buss_status, bstp, router_code, title, remark, cmpy, cstc,
+                                           create_by, create_time)
+        VALUES (#{reportId}, #{bussDocId},  #{aufnr}, #{confno}, #{confcnt}, #{budat},
+                #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark}, #{cmpy}, #{cstc},
+                #{createBy}, #{createTime})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_pp_order_report_header
+        SET
+            aufnr           = #{aufnr},
+            confno          = #{confno},
+            confcnt         = #{confcnt},
+            budat           = #{budat},
+            buss_doc_id     = #{bussDocId},
+            buss_date       = #{bussDate},
+            bstp            = #{bstp},
+            router_code     = #{routerCode},
+            title           = #{title},
+            remark          = #{remark},
+            cmpy            = #{cmpy},
+            cstc            = #{cstc},
+            update_by       = #{updateBy},
+            update_time     = #{updateTime}
+        where report_id = #{reportId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_pp_order_report_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE report_id = #{reportId}
+    </update>
+
+    <update id="updateSapRet">
+        update z000_pp_order_report_header
+        <set>
+            <if test="confno != null and confno != ''">
+                buss_status = 'F',
+                confno = #{confno},
+            </if>
+            <if test="confcnt != null and confcnt != ''">
+                confcnt = #{confcnt},
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where report_id = #{reportId}
+    </update>
+
+    <update id="updateReverseSapRet">
+        UPDATE z000_pp_order_report_header
+        SET rev_confcnt    = #{revConfcnt},
+            rev_sap_msg    = #{revSapMsg},
+            rev_sap_mess_id = #{revSapMessId}
+        WHERE report_id = #{reportId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_pp_order_report_header WHERE report_id = #{reportId}
+    </delete>
+</mapper>

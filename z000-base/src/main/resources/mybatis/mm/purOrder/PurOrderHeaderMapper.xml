@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.purOrder.PurOrderHeaderMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.purOrder.PurOrderHeader" id="Result">
+        <result property="orderId" column="order_id"/>
+        <result property="vchNo" column="vch_no"/>
+        <result property="vchType" column="vch_type"/>
+        <result property="supp" column="supp"/>
+        <result property="purOrg" column="pur_org"/>
+        <result property="purGroup" column="pur_group"/>
+        <result property="curr" column="curr"/>
+        <result property="vchDate" column="vch_date"/>
+        <result property="textLine" column="text_line"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="bstp" column="bstp"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="applyId" column="apply_id"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_pur_order_header
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ buss_doc_id = bussDocId @E@
+            AND @S@ buss_date = bussDate @E@
+            AND @S@ buss_status = bussStatus @E@
+            AND @S@ vch_no = vchNo @E@
+            AND @S@ vch_type = vchType @E@
+            AND @S@ supp = supp @E@
+            AND @S@ pur_org = purOrg @E@
+            AND @S@ pur_group = purGroup @E@
+            AND @S@ curr = curr @E@
+            AND @S@ apply_id = applyId @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ cstc = cstc @E@
+            AND @S@ create_time = createTime @E@
+        </where>
+        <if test="orders != null and orders.size() > 0">
+            @OS orders @OE</if>
+        <if test="orders == null or orders.size() == 0">
+            ORDER BY create_time DESC
+        </if>
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where order_id = #{orderId}
+    </select>
+
+    <select id="selectByApplyId" parameterType="string" resultMap="Result">
+        <include refid="selectSql" />
+        where apply_id = #{applyId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_mm_pur_order_header (order_id, buss_doc_id, vch_no, cmpy, vch_type, supp,
+                                         pur_org, pur_group, curr, vch_date, text_line,
+                                         buss_date, buss_status, bstp, router_code, title, remark, cstc,
+                                         create_by, create_time, apply_id)
+        VALUES (#{orderId}, #{bussDocId}, #{vchNo}, #{cmpy}, #{vchType}, #{supp},
+                #{purOrg}, #{purGroup}, #{curr}, #{vchDate}, #{textLine},
+                #{bussDate}, #{bussStatus}, #{bstp}, #{routerCode}, #{title}, #{remark}, #{cstc},
+                #{createBy}, #{createTime}, #{applyId})
+    </insert>
+
+    <update id="update">
+        UPDATE z000_mm_pur_order_header
+        SET vch_no         = #{vchNo},
+            cmpy           = #{cmpy},
+            vch_type       = #{vchType},
+            supp           = #{supp},
+            pur_org        = #{purOrg},
+            pur_group      = #{purGroup},
+            curr           = #{curr},
+            vch_date       = #{vchDate},
+            text_line      = #{textLine},
+            buss_doc_id    = #{bussDocId},
+            buss_date      = #{bussDate},
+            bstp           = #{bstp},
+            router_code    = #{routerCode},
+            title          = #{title},
+            remark         = #{remark},
+            apply_id        = #{applyId},
+            update_by      = #{updateBy},
+            update_time    = #{updateTime}
+        where order_id = #{orderId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        UPDATE z000_mm_pur_order_header
+        SET buss_status = #{bussStatus},
+            buss_doc_id = #{bussDocId}
+        WHERE order_id = #{orderId}
+    </update>
+
+    <update id="updateCgpzh">
+        update z000_mm_pur_order_header
+        <set>
+            <if test="vchNo != null and vchNo != ''">
+                vch_no = #{vchNo},
+                buss_status = 'F',
+            </if>
+            <if test="sapMsg != null and sapMsg != ''">
+                sap_msg = #{sapMsg},
+            </if>
+            <if test="sapMessId != null and sapMessId != ''">
+                sap_mess_id = #{sapMessId},
+            </if>
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_mm_pur_order_header WHERE order_id = #{orderId}
+    </delete>
+</mapper>

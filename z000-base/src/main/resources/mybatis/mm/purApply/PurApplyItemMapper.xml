@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mm.purApply.PurApplyItemMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mm.purApply.PurApplyItem" id="Result">
+        <id property="applyId" column="apply_id"/>
+        <id property="itemNo" column="item_no"/>
+        <result property="purGroup" column="pur_group"/>
+        <result property="needUser" column="need_user"/>
+        <result property="itemText" column="item_text"/>
+        <result property="mtlCode" column="mtl_code"/>
+        <result property="fact" column="fact"/>
+        <result property="store" column="store"/>
+        <result property="needNo" column="need_no"/>
+        <result property="mtlGroup" column="mtl_group"/>
+        <result property="applyNum" column="apply_num"/>
+        <result property="unit" column="unit"/>
+        <result property="needDate" column="need_date"/>
+        <result property="deliveryDate" column="delivery_date"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select * from z000_mm_pur_apply_item
+    </sql>
+
+    <select id="selectList" parameterType="String" resultMap="Result">
+        <include refid="selectSql"/>
+        where apply_id = #{applyId}
+        order by item_no
+    </select>
+
+    <insert id="batchInsert">
+        insert into z000_mm_pur_apply_item (apply_id, item_no, pur_group, need_user, item_text, mtl_code, fact, store, need_no, mtl_group,
+                                       apply_num, unit, need_date, delivery_date)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.applyId}, #{item.itemNo}, #{item.purGroup}, #{item.needUser}, #{item.itemText}, #{item.mtlCode}, #{item.fact},
+             #{item.store}, #{item.needNo}, #{item.mtlGroup}, #{item.applyNum}, #{item.unit}, #{item.needDate}, #{item.deliveryDate})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByApplyId" parameterType="String">
+        delete from z000_mm_pur_apply_item where apply_id = #{applyId}
+    </delete>
+</mapper>
