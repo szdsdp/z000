@@ -36,6 +36,10 @@ public class SaleOrderHeader extends ClientWfBussBase {
      */
     private String salesOrg;
     /**
+     * 销售机构名称（非持久化）
+     */
+    private String salesOrgName;
+    /**
      * 分销渠道
      */
     private String distrChan;

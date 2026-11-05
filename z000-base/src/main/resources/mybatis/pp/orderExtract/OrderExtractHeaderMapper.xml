@@ -16,6 +16,8 @@
         <result property="mtlCode" column="mtl_code"/>
         <result property="fact" column="fact"/>
         <result property="routingNo" column="routing_no"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="receivedQty" column="received_qty"/>
     </resultMap>
 
     <sql id="selectSql">select * from z000_pp_order_extract_header</sql>
@@ -37,16 +39,17 @@
     </select>
 
     <insert id="batchUpsert">
-        insert into z000_pp_order_extract_header (order_no, order_type, order_desc, prod_ver, finish_date, start_date, res_no, shipped_qty, order_qty, unit, mtl_code, fact, routing_no)
+        insert into z000_pp_order_extract_header (order_no, order_type, order_desc, prod_ver, finish_date, start_date, res_no, shipped_qty, order_qty, unit, mtl_code, fact, routing_no, order_status, received_qty)
         values
         <foreach collection="list" item="item" separator=",">
             (#{item.orderNo}, #{item.orderType}, #{item.orderDesc}, #{item.prodVer}, #{item.finishDate}, #{item.startDate}, #{item.resNo},
-             #{item.shippedQty}, #{item.orderQty}, #{item.unit}, #{item.mtlCode}, #{item.fact}, #{item.routingNo})
+             #{item.shippedQty}, #{item.orderQty}, #{item.unit}, #{item.mtlCode}, #{item.fact}, #{item.routingNo}, #{item.orderStatus}, #{item.receivedQty})
         </foreach>
         on duplicate key update
             order_type = values(order_type), order_desc = values(order_desc), prod_ver = values(prod_ver),
             finish_date = values(finish_date), start_date = values(start_date), res_no = values(res_no),
             shipped_qty = values(shipped_qty), order_qty = values(order_qty), unit = values(unit),
-            mtl_code = values(mtl_code), fact = values(fact), routing_no = values(routing_no)
+            mtl_code = values(mtl_code), fact = values(fact), routing_no = values(routing_no),
+            order_status = values(order_status), received_qty = values(received_qty)
     </insert>
 </mapper>

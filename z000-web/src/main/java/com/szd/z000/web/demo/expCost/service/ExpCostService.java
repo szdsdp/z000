@@ -97,10 +97,13 @@ public class ExpCostService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void saveBussWfData(ExpCostParamVO expCostParamVO, ClientWfReturn clientWfReturn) {
+        logger.info("时间1={}", System.currentTimeMillis());
         // 保存业务数据
         saveBussData(expCostParamVO);
+        logger.info("时间2={}", System.currentTimeMillis());
         // 审批
         ClientWfReturn wfReturn = approval(expCostParamVO.getData(), expCostParamVO.getWfEvt());
+        logger.info("时间3={}", System.currentTimeMillis());
         // 获取业务主体
         ClientWfBussBase wfBussBase = wfReturn.getWfBussBase();
         // 复制工作流返回消息
@@ -120,6 +123,7 @@ public class ExpCostService {
                 expCostHeaderService.updateStatusAndDocId(expCostParamVO.getData().getHeader());
             }
         }
+        logger.info("时间4={}", System.currentTimeMillis());
     }
 
     /**

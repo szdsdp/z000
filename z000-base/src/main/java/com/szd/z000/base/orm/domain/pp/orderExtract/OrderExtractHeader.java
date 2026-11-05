@@ -67,4 +67,12 @@ public class OrderExtractHeader {
      * 工艺路线编号
      */
     private String routingNo;
+    /**
+     * 订单状态
+     */
+    private String orderStatus;
+    /**
+     * 已收货数量
+     */
+    private BigDecimal receivedQty;
 }

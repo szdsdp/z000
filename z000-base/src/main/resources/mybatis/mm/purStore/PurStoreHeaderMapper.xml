@@ -41,6 +41,7 @@
             AND @S@ buss_doc_id = bussDocId @E@
             AND @S@ buss_date = bussDate @E@
             AND @S@ buss_status = bussStatus @E@
+            AND @S@ bstp = bstp @E@
             AND @S@ cmpy = cmpy @E@
             AND @S@ cstc = cstc @E@
             AND @S@ create_time = createTime @E@

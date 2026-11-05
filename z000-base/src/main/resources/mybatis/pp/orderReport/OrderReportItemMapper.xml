@@ -7,7 +7,7 @@
     <resultMap type="com.szd.z000.base.orm.domain.pp.orderReport.OrderReportItem" id="Result">
         <id property="reportId" column="report_id"/>
         <id property="itemNo" column="item_no"/>
-        <result property="operation" column="operation"/>
+        <result property="operNo" column="oper_no"/>
         <result property="confText" column="conf_text"/>
         <result property="yield" column="yield"/>
         <result property="scrap" column="scrap"/>
@@ -26,10 +26,10 @@
     </select>
 
     <insert id="batchInsert">
-        insert into z000_pp_order_report_item (report_id, item_no, operation, conf_text, `yield`, scrap, rework)
+        insert into z000_pp_order_report_item (report_id, item_no, oper_no, conf_text, `yield`, scrap, rework)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.reportId}, #{item.itemNo}, #{item.operation}, #{item.confText}, #{item.yield}, #{item.scrap}, #{item.rework})
+            (#{item.reportId}, #{item.itemNo}, #{item.operNo}, #{item.confText}, #{item.yield}, #{item.scrap}, #{item.rework})
         </foreach>
     </insert>
 

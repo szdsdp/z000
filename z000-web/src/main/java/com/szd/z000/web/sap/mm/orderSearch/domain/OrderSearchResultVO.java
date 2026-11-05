@@ -33,6 +33,8 @@ public class OrderSearchResultVO {
     private String matnr;
     /** 工厂 */
     private String werks;
+    /** 工厂名称 */
+    private String werksT;
     /** 物料组 */
     private String matkl;
     /** 采购订单数量 */

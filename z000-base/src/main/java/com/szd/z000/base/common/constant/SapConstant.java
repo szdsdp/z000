@@ -138,4 +138,14 @@ public class SapConstant {
      */
     public static final String SZDFI016 = "SZDFI016";
 
+    /**
+     * 客商未清项抽取
+     */
+    public static final String SZDFI014 = "SZDFI014";
+
+    /**
+     * 回款认领单创建
+     */
+    public static final String SZDSD040 = "SZDSD040";
+
 }

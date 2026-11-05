@@ -6,8 +6,12 @@ import com.szd.core.client.domain.wf.ClientWfOper;
 import com.szd.core.client.domain.wf.ClientWfReturn;
 import com.szd.core.client.exception.ClientCustomException;
 import com.szd.core.client.service.ClientBaseController;
+import com.szd.z000.base.orm.domain.pp.orderExtract.OrderExtractHeader;
+import com.szd.z000.base.orm.domain.pp.orderExtract.OrderExtractProcess;
 import com.szd.z000.base.orm.domain.pp.orderReport.OrderReportHeader;
 import com.szd.z000.base.orm.domain.pp.orderReport.OrderReportItem;
+import com.szd.z000.base.orm.mapper.pp.orderExtract.OrderExtractHeaderMapper;
+import com.szd.z000.base.orm.mapper.pp.orderExtract.OrderExtractProcessMapper;
 import com.szd.z000.web.sap.pp.orderReport.domain.OrderReportDataVO;
 import com.szd.z000.web.sap.pp.orderReport.domain.OrderReportParamVO;
 import com.szd.z000.web.sap.pp.orderReport.domain.OrderReportResultVO;
@@ -31,6 +35,10 @@ public class OrderReportController extends ClientBaseController {
     private OrderReportService orderReportService;
     @Resource
     private OrderReportSapService orderReportSapService;
+    @Resource
+    private OrderExtractHeaderMapper orderExtractHeaderMapper;
+    @Resource
+    private OrderExtractProcessMapper orderExtractProcessMapper;
     @Resource
     private ClientCore clientCore;
 
@@ -68,7 +76,7 @@ public class OrderReportController extends ClientBaseController {
     private void getDescItemList(OrderReportDataVO data) {
         if (!CollectionUtils.isEmpty(data.getItemList())) {
             for (OrderReportItem item : data.getItemList()) {
-                item.setOperationName(clientCore.mdm.getDescA("Z000_PP_SCDDBG_OPERATION", item.getOperation(), "1"));
+                item.setOperNoName(clientCore.mdm.getDescA("Z000_PP_SCDDBG_OPERATION", item.getOperNo(), "1"));
             }
         }
     }
@@ -114,6 +122,37 @@ public class OrderReportController extends ClientBaseController {
         } catch (ClientCustomException e) {
             return ClientAjaxResult.error(e.getMessage());
         }
+    }
+
+    /**
+     * 校验扫描的订单号+工序编号是否合法
+     */
+    @GetMapping("/validateScan")
+    public ClientAjaxResult validateScan(String orderNo, String operNo) {
+        // 校验订单号
+        OrderExtractHeader order = orderExtractHeaderMapper.selectById(orderNo);
+        if (order == null) {
+            return ClientAjaxResult.error("订单号" + orderNo + "不存在，请先抽取生产订单数据");
+        }
+        // 校验工序编号
+        List<OrderExtractProcess> processList = orderExtractProcessMapper.selectByOrderNo(orderNo);
+        OrderExtractProcess matched = null;
+        if (!CollectionUtils.isEmpty(processList)) {
+            for (OrderExtractProcess p : processList) {
+                if (operNo.equals(p.getOperNo())) {
+                    matched = p;
+                    break;
+                }
+            }
+        }
+        if (matched == null) {
+            return ClientAjaxResult.error("工序编号" + operNo + "在订单" + orderNo + "中不存在");
+        }
+        // 返回工序描述
+        java.util.Map<String, String> result = new java.util.HashMap<>();
+        result.put("operNo", operNo);
+        result.put("operDesc", matched.getOperDesc() != null ? matched.getOperDesc() : "");
+        return ClientAjaxResult.success(result);
     }
 
     /**

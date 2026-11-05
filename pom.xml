@@ -24,6 +24,7 @@
         <zxing.version>3.4.1</zxing.version>
         <pagehelper.spring.boot.starter.version>1.4.6</pagehelper.spring.boot.starter.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <poi.version>5.2.3</poi.version>
     </properties>
 
     <modules>
@@ -90,6 +91,12 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.spring.boot.starter.version}</version>
+            </dependency>
+            <!-- excel poi -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
             </dependency>
             <!--二维码生成 -->
             <dependency>

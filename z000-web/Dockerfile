@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM eclipse-temurin:17-jre
 ADD target/szd-z000.jar /data/szd-z000.jar
 ADD target/classes/bootstrap.yml /data/bootstrap.yml
 EXPOSE 9090

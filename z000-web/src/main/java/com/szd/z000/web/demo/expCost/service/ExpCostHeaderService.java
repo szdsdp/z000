@@ -97,7 +97,7 @@ public class ExpCostHeaderService {
             list.forEach(header -> {
                 header.setCmpyName(clientCore.mdm.getDescA("CORE_CMPY", header.getCmpy(), "0"));
                 header.setCstcName(clientCore.mdm.getDescA("CORE_CSTC", header.getCstc(), "0"));
-                header.setUserId(clientCore.mdm.getDescA("CORE_USER", header.getUserId(), "0"));
+                header.setUserName(clientCore.mdm.getDescA("CORE_USER", header.getUserId(), "0"));
                 header.setBstp(clientCore.mdm.getDescA("CORE_BSTP", header.getBstp(), "0"));
                 header.setBussStatus(clientCore.mdm.getDescA("Z000_DOC_STAU", header.getBussStatus(), "0"));
                 header.setCreateBy(clientCore.mdm.getDescA("CORE_USER", header.getCreateBy(), "0"));

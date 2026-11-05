@@ -152,6 +152,10 @@ public class SaleOrderController extends ClientBaseController {
                 header.setBussStatusName(clientCore.mdm.getDescA("Z000_DOC_STAU", header.getBussStatus(), "0"));
                 header.setCreateByName(clientCore.mdm.getDescA("CORE_USER", header.getCreateBy(), "0"));
                 header.setUpdateByName(clientCore.mdm.getDescA("CORE_USER", header.getUpdateBy(), "0"));
+                // 补全售达方客户名称
+                header.setSoldToName(clientCore.mdm.getDescA("CORE_CUST", header.getSoldTo(), "0"));
+                // 补全销售机构名称
+                header.setSalesOrgName(clientCore.mdm.getDescA("Z000_MDM_ORG_SALE", header.getSalesOrg(), "0"));
             }
         }
     }

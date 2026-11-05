@@ -78,6 +78,11 @@ public class SapOrderSearchCtrRetItem {
     @XmlElement(name = "WERKS")
     private String werks;
     /**
+     * 工厂名称
+     */
+    @XmlElement(name = "WERKS_T")
+    private String werksT;
+    /**
      * 物料组
      */
     @XmlElement(name = "MATKL")

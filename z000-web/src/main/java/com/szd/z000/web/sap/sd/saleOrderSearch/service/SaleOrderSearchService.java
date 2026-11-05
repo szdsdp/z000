@@ -10,14 +10,18 @@ import com.szd.core.client.util.ClientUtilDate;
 import com.szd.z000.common.sap.domain.saleOrderSearch.SapSaleOrderSearchCtrRet;
 import com.szd.z000.common.sap.domain.saleOrderSearch.SapSaleOrderSearchCtrRetItem;
 import com.szd.z000.common.sap.domain.service.SapSaleOrderSearchService;
+import com.szd.z000.web.common.util.SessionCacheUtil;
 import com.szd.z000.web.sap.sd.saleOrderSearch.domain.SaleOrderSearchResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +43,11 @@ public class SaleOrderSearchService {
     private static final int SAP_PAGE_SIZE = 100;
 
     /**
+     * session缓存命名空间
+     */
+    private static final String CACHE_NAMESPACE = "saleOrderSearch";
+
+    /**
      * 查询销售订单列表（含分页）
      */
     public ClientPageTableRet queryList(ClientRpParam param) {
@@ -58,10 +67,15 @@ public class SaleOrderSearchService {
         logger.info("销售订单抽取查询 - kunnr: {}, vbeln: {}, auart: {}, vkorg: {}, pageNum: {}, pageSize: {}",
                 kunnr, vbeln, auart, vkorg, pageNum, pageSize);
 
-        // 调用SAP查询全部销售订单数据
-        List<SaleOrderSearchResultVO> allItems = querySapData(kunnr, vbeln, auart, vkorg, bdate, edate);
+        // 计算查询条件指纹
+        String cacheKey = buildCacheKey(kunnr, vbeln, auart, vkorg, bdate, edate);
 
-        logger.info("SAP返回 {} 条销售订单记录", allItems.size());
+        // 通过session缓存获取数据：条件不变则复用，条件变化则自动重新获取
+        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        List<SaleOrderSearchResultVO> allItems = SessionCacheUtil.getOrFetch(
+                session, CACHE_NAMESPACE, cacheKey,
+                () -> querySapData(kunnr, vbeln, auart, vkorg, bdate, edate)
+        );
 
         // 无数据返回空结果
         if (CollectionUtils.isEmpty(allItems)) {
@@ -206,5 +220,13 @@ public class SaleOrderSearchService {
         result.setRows(Collections.emptyList());
         result.setTotal(0);
         return result;
+    }
+
+    /**
+     * 构建查询条件指纹，用于判断两次查询条件是否一致
+     */
+    private String buildCacheKey(String kunnr, String vbeln, String auart,
+                                  String vkorg, String bdate, String edate) {
+        return String.format("%s|%s|%s|%s|%s|%s", kunnr, vbeln, auart, vkorg, bdate, edate);
     }
 }

@@ -1,14 +1,19 @@
 package com.szd.z000.web.demo.expCost.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.szd.core.client.ClientCore;
 import com.szd.core.client.domain.common.ClientAjaxResult;
 import com.szd.core.client.domain.common.ClientPageTableRet;
 import com.szd.core.client.domain.common.ClientResult;
 import com.szd.core.client.domain.common.ClientRpParam;
+import com.szd.core.client.domain.mdm.ClientObjBase;
+import com.szd.core.client.domain.tool.ClientAiSkillSqlParam;
+import com.szd.core.client.domain.tool.ClientAiSkillSqlRet;
 import com.szd.core.client.domain.wf.ClientWfOper;
 import com.szd.core.client.domain.wf.ClientWfReturn;
 import com.szd.core.client.exception.ClientCustomException;
 import com.szd.core.client.service.ClientBaseController;
+import com.szd.core.client.service.ClientLocalCache;
 import com.szd.z000.base.orm.domain.demo.expCost.ExpCostHeader;
 import com.szd.z000.web.demo.expCost.domain.ExpCostDataVO;
 import com.szd.z000.web.demo.expCost.domain.ExpCostParamVO;
@@ -16,10 +21,13 @@ import com.szd.z000.web.demo.expCost.domain.ExpCostResultVO;
 import com.szd.z000.web.demo.expCost.service.ExpCostHeaderService;
 import com.szd.z000.web.demo.expCost.service.ExpCostItemService;
 import com.szd.z000.web.demo.expCost.service.ExpCostService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 表单功能接口
@@ -27,6 +35,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/z000/demo/expCost")
 public class ExpCostController extends ClientBaseController {
+    private static final Logger logger = LoggerFactory.getLogger(ClientBaseController.class);
     @Resource
     private ExpCostService expCostService;
     @Resource
@@ -41,6 +50,13 @@ public class ExpCostController extends ClientBaseController {
      */
     @PostMapping("/list")
     public ClientPageTableRet list(@RequestBody ClientRpParam param) {
+        String s1 = ClientLocalCache.getMdm("CORE_USER", "DUANLZ");
+        String s2 = ClientLocalCache.getDict("CORE_DEV_ALIGN", "right");
+        String s3 = clientCore.mdm.getDescA("CORE_DEV_ALIGN", "right", "0");
+        ClientObjBase clientObjBase = ClientLocalCache.getMdm("CORE_BASE:DATA", "CORE_FSTG", ClientObjBase.class);
+        ConcurrentHashMap<String, ConcurrentHashMap<String, Object>> all = ClientLocalCache.getMdmAll();
+        ConcurrentHashMap<String, ConcurrentHashMap<String, Object>> allDict = ClientLocalCache.getDictAll();
+
         startPage(param.getPageNum(), param.getPageSize());
         List<ExpCostHeader> list = expCostService.selectList(param);
         expCostHeaderService.getDescList(list);
@@ -72,7 +88,6 @@ public class ExpCostController extends ClientBaseController {
      */
     @PostMapping("/check")
     public ClientAjaxResult check(@RequestBody ExpCostParamVO expCostParamVO) {
-//        throw new NullPointerException("test");
         try {
             ClientResult checkResult = expCostService.check(expCostParamVO);
             return ClientAjaxResult.success(checkResult);
@@ -111,5 +126,12 @@ public class ExpCostController extends ClientBaseController {
             wfOper.getWfBtn().setBtn_delete("V");
             wfOper.getWfBtn().setBtn_revoke("V");
         }
+    }
+
+    @PostMapping("/test01")
+    public ClientAjaxResult test01(@RequestBody ClientAiSkillSqlParam clientAiSkillSqlParam) {
+        ClientAiSkillSqlRet clientAiSkillSqlRet = clientCore.tool.execSkillSql(clientAiSkillSqlParam);
+        logger.info("clientAiSkillSqlRet:{}", JSON.toJSONString(clientAiSkillSqlRet));
+        return ClientAjaxResult.success(clientAiSkillSqlRet);
     }
 }

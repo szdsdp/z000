@@ -18,10 +18,10 @@ public class OrderReportItem {
      */
     private int itemNo;
     /**
-     * 活动编号（工序）
+     * 工序编号
      */
-    private String operation;
-    private String operationName;
+    private String operNo;
+    private String operNoName;
     /**
      * 确认文本
      */

@@ -37,6 +37,10 @@ public class PurStoreItem {
      */
     private BigDecimal quantity;
     /**
+     * 采购订单行数量
+     */
+    private BigDecimal orderQty;
+    /**
      * 单位
      */
     private String unit;

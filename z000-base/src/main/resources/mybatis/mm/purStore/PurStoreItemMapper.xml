@@ -12,6 +12,7 @@
         <result property="fact" column="fact"/>
         <result property="store" column="store"/>
         <result property="quantity" column="quantity"/>
+        <result property="orderQty" column="order_qty"/>
         <result property="unit" column="unit"/>
         <result property="orderNo" column="order_no"/>
         <result property="orderItemNo" column="order_item_no"/>
@@ -32,10 +33,10 @@
     </select>
 
     <insert id="batchInsert">
-        insert into z000_mm_pur_store_item (store_id, item_no, mtl_code, fact, store, quantity, unit, order_no, order_item_no, ref_buss_doc_id, ref_bstp, item_text)
+        insert into z000_mm_pur_store_item (store_id, item_no, mtl_code, fact, store, quantity, order_qty, unit, order_no, order_item_no, ref_buss_doc_id, ref_bstp, item_text)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.storeId}, #{item.itemNo}, #{item.mtlCode}, #{item.fact}, #{item.store}, #{item.quantity}, #{item.unit}, #{item.orderNo}, #{item.orderItemNo}, #{item.refBussDocId}, #{item.refBstp}, #{item.itemText})
+            (#{item.storeId}, #{item.itemNo}, #{item.mtlCode}, #{item.fact}, #{item.store}, #{item.quantity}, #{item.orderQty}, #{item.unit}, #{item.orderNo}, #{item.orderItemNo}, #{item.refBussDocId}, #{item.refBstp}, #{item.itemText})
         </foreach>
     </insert>
 

@@ -10,14 +10,18 @@ import com.szd.core.client.util.ClientUtilDate;
 import com.szd.z000.common.sap.domain.storeSearch.SapStoreSearchCtrRet;
 import com.szd.z000.common.sap.domain.storeSearch.SapStoreSearchCtrRetItem;
 import com.szd.z000.common.sap.domain.service.SapStoreSearchService;
+import com.szd.z000.web.common.util.SessionCacheUtil;
 import com.szd.z000.web.sap.mm.storeSearch.domain.StoreSearchResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +41,11 @@ public class StoreSearchService {
      * SAP分页查询每页大小
      */
     private static final int SAP_PAGE_SIZE = 100;
+
+    /**
+     * session缓存命名空间
+     */
+    private static final String CACHE_NAMESPACE = "storeSearch";
 
     /**
      * 查询物料凭证列表（含分页）
@@ -59,10 +68,15 @@ public class StoreSearchService {
         logger.info("物料凭证抽取查询 - bukrs: {}, lifnr: {}, ebeln: {}, pageNum: {}, pageSize: {}",
                 bukrs, lifnr, ebeln, pageNum, pageSize);
 
-        // 调用SAP查询全部物料凭证数据
-        List<StoreSearchResultVO> allItems = querySapData(bukrs, lifnr, waers, ebeln, matnr, bdate, edate);
+        // 计算查询条件指纹
+        String cacheKey = buildCacheKey(bukrs, lifnr, waers, ebeln, matnr, bdate, edate);
 
-        logger.info("SAP返回 {} 条物料凭证记录", allItems.size());
+        // 通过session缓存获取数据：条件不变则复用，条件变化则自动重新获取
+        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        List<StoreSearchResultVO> allItems = SessionCacheUtil.getOrFetch(
+                session, CACHE_NAMESPACE, cacheKey,
+                () -> querySapData(bukrs, lifnr, waers, ebeln, matnr, bdate, edate)
+        );
 
         // 无数据返回空结果
         if (CollectionUtils.isEmpty(allItems)) {
@@ -207,5 +221,14 @@ public class StoreSearchService {
         result.setRows(Collections.emptyList());
         result.setTotal(0);
         return result;
+    }
+
+    /**
+     * 构建查询条件指纹，用于判断两次查询条件是否一致
+     */
+    private String buildCacheKey(String bukrs, String lifnr, String waers,
+                                  String ebeln, String matnr, String bdate, String edate) {
+        return String.format("%s|%s|%s|%s|%s|%s|%s",
+                bukrs, lifnr, waers, ebeln, matnr, bdate, edate);
     }
 }

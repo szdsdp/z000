@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.payFlowCash.PayFlowCashMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.payFlowCash.PayFlowCash" id="PayFlowCashResult">
+        <result property="bankDoc" column="bank_doc"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="bankFlowNo" column="bank_flow_no"/>
+        <result property="myAccNo" column="my_acc_no"/>
+        <result property="payAccNo" column="pay_acc_no"/>
+        <result property="payAccName" column="pay_acc_name"/>
+        <result property="curr" column="curr"/>
+        <result property="amt" column="amt"/>
+        <result property="tranDate" column="tran_date"/>
+        <result property="tranTime" column="tran_time"/>
+        <result property="summary" column="summary"/>
+        <result property="cust" column="cust"/>
+        <result property="amtProcess" column="amt_process"/>
+        <result property="amtReceipt" column="amt_receipt"/>
+        <result property="amtRemain" column="amtRemain"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        SELECT bank_doc, cmpy, bank_flow_no, my_acc_no, pay_acc_no,
+               pay_acc_name, curr, amt, tran_date, tran_time, summary, cust, amt_process, amt_receipt
+        FROM z000_sd_pay_flow_cash
+    </sql>
+
+    <select id="selectList" resultMap="PayFlowCashResult">
+        SELECT a.bank_doc, a.cmpy, a.bank_flow_no, a.my_acc_no, a.pay_acc_no,
+               a.pay_acc_name, a.curr, a.amt, a.tran_date, a.tran_time, a.summary, a.cust,
+               a.amt_process, a.amt_receipt,
+               a.amt - a.amt_process - a.amt_receipt AS amtRemain
+        FROM z000_sd_pay_flow_cash a
+        <where>
+            AND @S@ a.bank_doc = bankDoc @E@
+            AND @S@ a.cmpy = cmpy @E@
+            AND @S@ a.bank_flow_no = bankFlowNo @E@
+            AND @S@ a.my_acc_no = myAccNo @E@
+            AND @S@ a.pay_acc_no = payAccNo @E@
+            AND @S@ a.pay_acc_name = payAccName @E@
+            AND @S@ a.amt = amt @E@
+            AND @S@ a.tran_date = tranDate @E@
+            AND @S@ a.tran_time = tranTime @E@
+            AND @S@ a.cust = cust @E@
+        </where>
+        ORDER BY a.bank_doc DESC
+    </select>
+
+    <select id="selectById" resultMap="PayFlowCashResult">
+        <include refid="selectSql"/> WHERE bank_doc = #{bankDoc}
+    </select>
+
+    <select id="selectByParams" resultMap="PayFlowCashResult">
+        <include refid="selectSql"/>
+        WHERE bank_flow_no = #{bankFlowNo} AND my_acc_no = #{myAccNo}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_sd_pay_flow_cash (bank_doc, cmpy, bank_flow_no, my_acc_no, pay_acc_no,
+              pay_acc_name, curr, amt, tran_date, tran_time, summary, cust, amt_process, amt_receipt)
+        VALUES (#{bankDoc}, #{cmpy}, #{bankFlowNo}, #{myAccNo}, #{payAccNo},
+                #{payAccName}, #{curr}, #{amt}, #{tranDate}, #{tranTime}, #{summary}, #{cust}, 0, 0)
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO z000_sd_pay_flow_cash (bank_doc, cmpy, bank_flow_no, my_acc_no, pay_acc_no,
+              pay_acc_name, curr, amt, tran_date, tran_time, summary, cust, amt_process, amt_receipt)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.bankDoc}, #{item.cmpy}, #{item.bankFlowNo}, #{item.myAccNo}, #{item.payAccNo},
+             #{item.payAccName}, #{item.curr}, #{item.amt}, #{item.tranDate}, #{item.tranTime},
+             #{item.summary}, #{item.cust}, 0, 0)
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE z000_sd_pay_flow_cash
+        SET pay_acc_no = #{payAccNo}, pay_acc_name = #{payAccName}, curr = #{curr},
+            amt = #{amt}, tran_date = #{tranDate}, tran_time = #{tranTime},
+            summary = #{summary}, cust = #{cust}
+        WHERE bank_doc = #{bankDoc}
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE z000_sd_pay_flow_cash
+            SET cmpy = #{item.cmpy}, pay_acc_no = #{item.payAccNo}, pay_acc_name = #{item.payAccName},
+                curr = #{item.curr}, amt = #{item.amt}, tran_date = #{item.tranDate},
+                tran_time = #{item.tranTime}, summary = #{item.summary}, cust = #{item.cust}
+            WHERE bank_flow_no = #{item.bankFlowNo} AND my_acc_no = #{item.myAccNo}
+        </foreach>
+    </update>
+
+    <update id="updateCust">
+        UPDATE z000_sd_pay_flow_cash SET cust = #{cust}
+        WHERE bank_doc IN
+        <foreach item="item" collection="bankDoc" separator="," open="(" close=")" index="index">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateAmtReceipt">
+        UPDATE z000_sd_pay_flow_cash
+        SET amt_process = #{amtProcess}, amt_receipt = #{amtReceipt}
+        WHERE bank_doc = #{bankDoc}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_sd_pay_flow_cash WHERE bank_doc = #{bankDoc}
+    </delete>
+</mapper>

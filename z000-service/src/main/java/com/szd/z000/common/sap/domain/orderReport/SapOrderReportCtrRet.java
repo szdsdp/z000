@@ -17,6 +17,11 @@ public class SapOrderReportCtrRet {
     /**
      * 操作完成的确认编号
      */
+    @XmlElement(name = "IF_DOCNO")
+    private String ifDocno;
+    /**
+     * 操作完成的确认编号
+     */
     @XmlElement(name = "CONFNO")
     private String confno;
     /**

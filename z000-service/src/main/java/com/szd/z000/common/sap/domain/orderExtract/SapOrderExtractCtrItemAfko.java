@@ -51,4 +51,10 @@ public class SapOrderExtractCtrItemAfko {
     /** 工艺路线编号 */
     @XmlElement(name = "AUFPL")
     private String aufpl;
+    /** 订单状态 */
+    @XmlElement(name = "ZDDZT")
+    private String zddzt;
+    /** 已收货数量 */
+    @XmlElement(name = "WEMNG")
+    private String wemng;
 }

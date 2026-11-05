@@ -58,7 +58,7 @@ public class OrderReportSapService {
         List<SapOrderReportCtrItem> itemListSap = new ArrayList<>();
         for (OrderReportItem item : itemList) {
             SapOrderReportCtrItem sapItem = new SapOrderReportCtrItem();
-            sapItem.setOperation(item.getOperation());
+            sapItem.setOperation(item.getOperNo());
             sapItem.setConfText(item.getConfText());
             sapItem.setYield(item.getYield());
             sapItem.setScrap(item.getScrap());

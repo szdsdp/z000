@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.payFlowBill.PayFlowBillMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.sd.payFlowBill.PayFlowBill" id="PayFlowBillResult">
+        <result property="sysBillNo" column="sys_bill_no"/>
+        <result property="billNo" column="bill_no"/>
+        <result property="subBillFrom" column="sub_bill_from"/>
+        <result property="subBillTo" column="sub_bill_to"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="holderAcc" column="holder_acc"/>
+        <result property="endorserAcc" column="endorser_acc"/>
+        <result property="endorser" column="endorser"/>
+        <result property="amt" column="amt"/>
+        <result property="signDate" column="sign_date"/>
+        <result property="billType" column="bill_type"/>
+        <result property="billScope" column="bill_scope"/>
+        <result property="acceptor" column="acceptor"/>
+        <result property="drawer" column="drawer"/>
+        <result property="payee" column="payee"/>
+        <result property="issueDate" column="issue_date"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="cust" column="cust"/>
+        <result property="summary" column="summary"/>
+        <result property="amtProcess" column="amt_process"/>
+        <result property="amtReceipt" column="amt_receipt"/>
+        <result property="amtRemain" column="amtRemain"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        SELECT sys_bill_no, bill_no, sub_bill_from, sub_bill_to, cmpy, holder_acc, endorser_acc,
+               endorser, amt, sign_date, bill_type, bill_scope, acceptor, drawer, payee,
+               issue_date, due_date, summary, cust, amt_process, amt_receipt
+        FROM z000_sd_pay_flow_bill
+    </sql>
+
+    <select id="selectList" resultMap="PayFlowBillResult">
+        SELECT a.sys_bill_no, a.bill_no, a.sub_bill_from, a.sub_bill_to, a.cmpy, a.holder_acc,
+               a.endorser_acc, a.endorser, a.amt, a.sign_date, a.bill_type, a.bill_scope,
+               a.acceptor, a.drawer, a.payee, a.issue_date, a.due_date, a.summary, a.cust,
+               a.amt_process, a.amt_receipt,
+               a.amt - a.amt_process - a.amt_receipt AS amtRemain
+        FROM z000_sd_pay_flow_bill a
+        <where>
+            AND @S@ a.sign_date = signDate @E@
+            AND @S@ a.endorser_acc = endorserAcc @E@
+            AND @S@ a.endorser = endorser @E@
+            AND @S@ a.bill_no = billNo @E@
+            AND @S@ a.sys_bill_no = sysBillNo @E@
+            AND @S@ a.cmpy = cmpy @E@
+            AND @S@ a.holder_acc = holderAcc @E@
+            AND @S@ a.amt = amt @E@
+            AND @S@ a.bill_type = billType @E@
+            AND @S@ a.bill_scope = billScope @E@
+            AND @S@ a.issue_date = issueDate @E@
+            AND @S@ a.due_date = dueDate @E@
+            AND @S@ a.cust = cust @E@
+        </where>
+        ORDER BY a.sys_bill_no DESC
+    </select>
+
+    <select id="selectById" resultMap="PayFlowBillResult">
+        <include refid="selectSql"/> WHERE sys_bill_no = #{sysBillNo}
+    </select>
+
+    <select id="selectByUk" resultMap="PayFlowBillResult">
+        <include refid="selectSql"/>
+        WHERE holder_acc = #{holderAcc} AND bill_no = #{billNo}
+          AND sub_bill_from = #{subBillFrom} AND sub_bill_to = #{subBillTo}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_sd_pay_flow_bill (sys_bill_no, bill_no, sub_bill_from, sub_bill_to, cmpy,
+              holder_acc, endorser_acc, endorser, amt, sign_date, bill_type, bill_scope, acceptor,
+              drawer, payee, issue_date, due_date, summary, cust, amt_process, amt_receipt)
+        VALUES (#{sysBillNo}, #{billNo}, #{subBillFrom}, #{subBillTo}, #{cmpy}, #{holderAcc},
+                #{endorserAcc}, #{endorser}, #{amt}, #{signDate}, #{billType}, #{billScope},
+                #{acceptor}, #{drawer}, #{payee}, #{issueDate}, #{dueDate}, #{summary}, #{cust}, 0, 0)
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO z000_sd_pay_flow_bill (sys_bill_no, bill_no, sub_bill_from, sub_bill_to, cmpy,
+              holder_acc, endorser_acc, endorser, amt, sign_date, bill_type, bill_scope, acceptor,
+              drawer, payee, issue_date, due_date, summary, cust)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.sysBillNo}, #{item.billNo}, #{item.subBillFrom}, #{item.subBillTo}, #{item.cmpy},
+             #{item.holderAcc}, #{item.endorserAcc}, #{item.endorser}, #{item.amt}, #{item.signDate},
+             #{item.billType}, #{item.billScope}, #{item.acceptor}, #{item.drawer}, #{item.payee},
+             #{item.issueDate}, #{item.dueDate}, #{item.summary}, #{item.cust})
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE z000_sd_pay_flow_bill
+        SET endorser_acc = #{endorserAcc}, endorser = #{endorser}, amt = #{amt},
+            sign_date = #{signDate}, bill_type = #{billType}, bill_scope = #{billScope},
+            acceptor = #{acceptor}, drawer = #{drawer}, payee = #{payee},
+            issue_date = #{issueDate}, due_date = #{dueDate},
+            summary = #{summary}, cust = #{cust}
+        WHERE sys_bill_no = #{sysBillNo}
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE z000_sd_pay_flow_bill
+            SET endorser = #{item.endorser}, endorser_acc = #{item.endorserAcc}, amt = #{item.amt},
+                sign_date = #{item.signDate}, bill_type = #{item.billType}, bill_scope = #{item.billScope},
+                acceptor = #{item.acceptor}, drawer = #{item.drawer}, payee = #{item.payee},
+                issue_date = #{item.issueDate}, due_date = #{item.dueDate},
+                summary = #{item.summary}, cust = #{item.cust}
+            WHERE bill_no = #{item.billNo} AND sub_bill_from = #{item.subBillFrom}
+              AND sub_bill_to = #{item.subBillTo} AND cmpy = #{item.cmpy}
+              AND holder_acc = #{item.holderAcc}
+        </foreach>
+    </update>
+
+    <update id="updateCust">
+        UPDATE z000_sd_pay_flow_bill SET cust = #{cust}
+        WHERE sys_bill_no IN
+        <foreach item="item" collection="sysBillNo" separator="," open="(" close=")" index="index">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateAmtReceipt">
+        UPDATE z000_sd_pay_flow_bill
+        SET amt_process = #{amtProcess}, amt_receipt = #{amtReceipt}
+        WHERE sys_bill_no = #{bankDoc}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM z000_sd_pay_flow_bill WHERE sys_bill_no = #{sysBillNo}
+    </delete>
+</mapper>

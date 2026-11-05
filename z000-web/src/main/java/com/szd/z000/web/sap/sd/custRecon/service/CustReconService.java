@@ -10,14 +10,18 @@ import com.szd.core.client.util.ClientUtilDate;
 import com.szd.z000.common.sap.domain.custRecon.SapCustReconCtrRet;
 import com.szd.z000.common.sap.domain.custRecon.SapCustReconCtrRetItem;
 import com.szd.z000.common.sap.domain.service.SapCustReconService;
+import com.szd.z000.web.common.util.SessionCacheUtil;
 import com.szd.z000.web.sap.sd.custRecon.domain.CustReconResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +41,11 @@ public class CustReconService {
     private static final int SAP_PAGE_SIZE = 100;
 
     /**
+     * session缓存命名空间
+     */
+    private static final String CACHE_NAMESPACE = "custRecon";
+
+    /**
      * 查询客商对账列表（含分页）
      */
     public ClientPageTableRet queryList(ClientRpParam param) {
@@ -54,10 +63,15 @@ public class CustReconService {
         logger.info("客商对账查询 - bdate: {}, edate: {}, bukrs: {}, kunnr: {}, pageNum: {}, pageSize: {}",
                 bdate, edate, bukrs, kunnr, pageNum, pageSize);
 
-        // 调用SAP查询全部对账数据
-        List<CustReconResultVO> allItems = querySapData(bdate, edate, bukrs, kunnr);
+        // 计算查询条件指纹
+        String cacheKey = buildCacheKey(bdate, edate, bukrs, kunnr);
 
-        logger.info("SAP返回 {} 条对账记录", allItems.size());
+        // 通过session缓存获取数据：条件不变则复用，条件变化则自动重新获取
+        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        List<CustReconResultVO> allItems = SessionCacheUtil.getOrFetch(
+                session, CACHE_NAMESPACE, cacheKey,
+                () -> querySapData(bdate, edate, bukrs, kunnr)
+        );
 
         // 无数据返回空结果
         if (CollectionUtils.isEmpty(allItems)) {
@@ -196,5 +210,12 @@ public class CustReconService {
         result.setRows(Collections.emptyList());
         result.setTotal(0);
         return result;
+    }
+
+    /**
+     * 构建查询条件指纹，用于判断两次查询条件是否一致
+     */
+    private String buildCacheKey(String bdate, String edate, String bukrs, String kunnr) {
+        return String.format("%s|%s|%s|%s", bdate, edate, bukrs, kunnr);
     }
 }

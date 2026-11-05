@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.mdm.bankAcc.BankAccMapper">
+
+    <resultMap type="com.szd.z000.base.orm.domain.mdm.bankAcc.BankAcc" id="BankAccResult">
+        <result property="accNo" column="acc_no"/>
+        <result property="accName" column="acc_name"/>
+        <result property="curr" column="curr"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="accs" column="accs"/>
+        <result property="bankCode" column="bank_code"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        SELECT
+        acc_no,
+        acc_name,
+        curr,
+        cmpy,
+        accs,
+        bank_code
+        FROM z000_mdm_bank_acc
+    </sql>
+
+    <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="BankAccResult">
+        <include refid="selectSql"/>
+        <where>
+            AND @S@ acc_no = accNo @E@
+            AND @S@ cmpy = cmpy @E@
+            AND @S@ acc_name = accName @E@
+            AND @S@ curr = curr @E@
+        </where>
+        ORDER BY acc_no
+    </select>
+
+    <select id="selectById" parameterType="string" resultMap="BankAccResult">
+        <include refid="selectSql"/>
+        WHERE acc_no = #{accNo}
+    </select>
+
+    <update id="update">
+        UPDATE z000_mdm_bank_acc
+        SET
+        acc_name = #{accName},
+        curr = #{curr},
+        accs = #{accs},
+        bank_code = #{bankCode}
+        WHERE acc_no = #{accNo}
+        AND cmpy = #{cmpy}
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO z000_mdm_bank_acc (
+        acc_no,
+        acc_name,
+        curr,
+        cmpy,
+        accs,
+        bank_code
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.accNo},
+            #{item.accName},
+            #{item.curr},
+            #{item.cmpy},
+            #{item.accs},
+            #{item.bankCode}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insert">
+        INSERT INTO z000_mdm_bank_acc (
+        acc_no,
+        acc_name,
+        curr,
+        cmpy,
+        accs,
+        bank_code
+        ) VALUES (
+        #{accNo},
+        #{accName},
+        #{curr},
+        #{cmpy},
+        #{accs},
+        #{bankCode}
+        )
+    </insert>
+
+    <delete id="deleteById" parameterType="string">
+        DELETE FROM z000_mdm_bank_acc
+        WHERE acc_no = #{accNo}
+    </delete>
+
+    <delete id="batchDeleteByIds" parameterType="java.util.List">
+        DELETE FROM z000_mdm_bank_acc
+        WHERE acc_no IN
+        <foreach collection="list" item="accNo" open="(" separator="," close=")">
+            #{accNo}
+        </foreach>
+    </delete>
+
+</mapper>

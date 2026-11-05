@@ -28,6 +28,8 @@
         <result property="createTime" column="create_time"/>
         <result property="updateBy" column="update_by"/>
         <result property="updateTime" column="update_time"/>
+        <result property="reportQty" column="report_qty"/>
+        <result property="scrapQty" column="scrap_qty"/>
     </resultMap>
 
     <sql id="selectSql">
@@ -35,20 +37,26 @@
     </sql>
 
     <select id="selectList" parameterType="com.szd.core.client.domain.common.ClientRpParam" resultMap="Result">
-        <include refid="selectSql"/>
+        select h.*, ifnull(i.report_qty, 0) as report_qty, ifnull(i.scrap_qty, 0) as scrap_qty
+        from z000_pp_order_report_header h
+        left join (
+            select report_id, sum(yield) as report_qty, sum(scrap) as scrap_qty
+            from z000_pp_order_report_item
+            group by report_id
+        ) i on h.report_id = i.report_id
         <where>
-            AND @S@ buss_doc_id = bussDocId @E@
-            AND @S@ buss_date = bussDate @E@
-            AND @S@ buss_status = bussStatus @E@
-            AND @S@ aufnr = aufnr @E@
-            AND @S@ cmpy = cmpy @E@
-            AND @S@ cstc = cstc @E@
-            AND @S@ create_time = createTime @E@
+            AND @S@ h.buss_doc_id = bussDocId @E@
+            AND @S@ h.buss_date = bussDate @E@
+            AND @S@ h.buss_status = bussStatus @E@
+            AND @S@ h.aufnr = aufnr @E@
+            AND @S@ h.cmpy = cmpy @E@
+            AND @S@ h.cstc = cstc @E@
+            AND @S@ h.create_time = createTime @E@
         </where>
         <if test="orders != null and orders.size() > 0">
             @OS orders @OE</if>
         <if test="orders == null or orders.size() == 0">
-            ORDER BY create_time DESC
+            ORDER BY h.create_time DESC
         </if>
     </select>
 

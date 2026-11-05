@@ -80,6 +80,10 @@ public class OrderExtractService {
             // 构建SAP请求参数：查询条件 + 分页信息
             String bdate = params.get("bdate");
             String edate = params.get("edate");
+            // 仅输入开始日期时，结束日期默认等于开始日期
+            if (bdate != null && !bdate.isEmpty() && (edate == null || edate.isEmpty())) {
+                edate = bdate;
+            }
             String bukrs = params.get("bukrs");
             String auart = params.get("auart");
             String werks = params.get("werks");
@@ -182,6 +186,9 @@ public class OrderExtractService {
                 h.setMtlCode(afko.getMatnr());
                 h.setFact(afko.getWerks());
                 h.setRoutingNo(afko.getAufpl());
+                // 新增字段：订单状态、已收货数量
+                h.setOrderStatus(afko.getZddzt());
+                h.setReceivedQty(parseBigDecimal(afko.getWemng()));
                 orderExtractHeaderMapper.batchUpsert(java.util.Collections.singletonList(h));
                 totalCount++;
 

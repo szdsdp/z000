@@ -10,14 +10,18 @@ import com.szd.core.client.util.ClientUtilDate;
 import com.szd.z000.common.sap.domain.suppRecon.SapSuppReconCtrRet;
 import com.szd.z000.common.sap.domain.suppRecon.SapSuppReconCtrRetItem;
 import com.szd.z000.common.sap.domain.service.SapSuppReconService;
+import com.szd.z000.web.common.util.SessionCacheUtil;
 import com.szd.z000.web.sap.mm.suppRecon.domain.SuppReconResultVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +43,11 @@ public class SuppReconService {
     private static final int SAP_PAGE_SIZE = 100;
 
     /**
+     * session缓存命名空间
+     */
+    private static final String CACHE_NAMESPACE = "suppRecon";
+
+    /**
      * 查询供应商对账列表（含分页）
      */
     public ClientPageTableRet queryList(ClientRpParam param) {
@@ -56,10 +65,15 @@ public class SuppReconService {
         logger.info("供应商对账查询 - bdate: {}, edate: {}, bukrs: {}, lifnr: {}, pageNum: {}, pageSize: {}",
                 bdate, edate, bukrs, lifnr, pageNum, pageSize);
 
-        // 调用SAP查询全部对账数据
-        List<SuppReconResultVO> allItems = querySapData(bdate, edate, bukrs, lifnr);
+        // 计算查询条件指纹
+        String cacheKey = buildCacheKey(bdate, edate, bukrs, lifnr);
 
-        logger.info("SAP返回 {} 条对账记录", allItems.size());
+        // 通过session缓存获取数据：条件不变则复用，条件变化则自动重新获取
+        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        List<SuppReconResultVO> allItems = SessionCacheUtil.getOrFetch(
+                session, CACHE_NAMESPACE, cacheKey,
+                () -> querySapData(bdate, edate, bukrs, lifnr)
+        );
 
         // 无数据返回空结果
         if (CollectionUtils.isEmpty(allItems)) {
@@ -198,5 +212,12 @@ public class SuppReconService {
         result.setRows(Collections.emptyList());
         result.setTotal(0);
         return result;
+    }
+
+    /**
+     * 构建查询条件指纹，用于判断两次查询条件是否一致
+     */
+    private String buildCacheKey(String bdate, String edate, String bukrs, String lifnr) {
+        return String.format("%s|%s|%s|%s", bdate, edate, bukrs, lifnr);
     }
 }

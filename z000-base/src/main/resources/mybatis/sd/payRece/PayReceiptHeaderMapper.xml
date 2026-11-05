@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.szd.z000.base.orm.mapper.sd.payRece.PayReceiptHeaderMapper">
+    <resultMap type="com.szd.z000.base.orm.domain.sd.payRece.PayReceiptHeader" id="Result">
+        <id property="receiptId" column="receipt_id"/>
+        <result property="bussDocId" column="buss_doc_id"/>
+        <result property="cmpy" column="cmpy"/>
+        <result property="cstc" column="cstc"/>
+        <result property="bstp" column="bstp"/>
+        <result property="bussDate" column="buss_date"/>
+        <result property="bussStatus" column="buss_status"/>
+        <result property="routerCode" column="router_code"/>
+        <result property="title" column="title"/>
+        <result property="remark" column="remark"/>
+        <result property="userId" column="user_id"/>
+        <result property="curr" column="curr"/>
+        <result property="payNature" column="pay_nature"/>
+        <result property="payWay" column="pay_way"/>
+        <result property="cust" column="cust"/>
+        <result property="region" column="region"/>
+        <result property="salesManager" column="sales_manager"/>
+        <result property="text" column="text"/>
+        <result property="prfc" column="prfc"/>
+        <result property="bankDoc" column="bank_doc"/>
+        <result property="amtReceipt" column="amt_receipt"/>
+        <result property="myAccNo" column="my_acc_no"/>
+        <result property="payAccNo" column="pay_acc_no"/>
+        <result property="payAccName" column="pay_acc_name"/>
+        <result property="summary" column="summary"/>
+        <result property="vchNum" column="vch_num"/>
+        <result property="vchYear" column="vch_year"/>
+        <result property="vchNumReverse" column="vch_num_reverse"/>
+        <result property="vchYearReverse" column="vch_year_reverse"/>
+        <result property="sapMessId" column="sap_mess_id"/>
+        <result property="sapMsg" column="sap_msg"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectSql">
+        select h.* from z000_sd_pay_receipt_header h
+    </sql>
+
+    <select id="selectList" resultMap="Result">
+        select h.*
+        from z000_sd_pay_receipt_header h
+        <where>
+            AND @S@ h.buss_date = bussDate @E@
+            AND @S@ h.cust = cust @E@
+            AND @S@ h.buss_doc_id = bussDocId @E@
+            AND @S@ h.user_id = userId @E@
+            AND @S@ h.pay_nature = payNature @E@
+            AND @S@ h.pay_way = payWay @E@
+            AND @S@ h.cmpy = cmpy @E@
+            AND @S@ h.curr = curr @E@
+            AND @S@ h.amt_receipt = amtReceipt @E@
+            AND @S@ h.buss_status = bussStatus @E@
+            AND @S@ h.bstp = bstp @E@
+            AND @S@ h.bank_doc = bankDoc @E@
+        </where>
+        order by h.create_time desc
+    </select>
+
+    <select id="selectById" resultMap="Result">
+        <include refid="selectSql"/>
+        where h.receipt_id = #{receiptId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO z000_sd_pay_receipt_header
+        (receipt_id, cmpy, cstc, bstp, buss_date, buss_status, router_code, title, remark, user_id, curr,
+         pay_nature, pay_way, cust, text, prfc, bank_doc, amt_receipt, my_acc_no, pay_acc_no, pay_acc_name,
+         summary, create_by, create_time)
+        values (#{receiptId}, #{cmpy}, #{cstc}, #{bstp}, #{bussDate}, #{bussStatus}, #{routerCode},
+                #{title}, #{remark}, #{userId}, #{curr}, #{payNature}, #{payWay}, #{cust}, #{text},
+                #{prfc}, #{bankDoc}, #{amtReceipt}, #{myAccNo}, #{payAccNo}, #{payAccName}, #{summary},
+                #{createBy}, #{createTime})
+    </insert>
+
+    <update id="update">
+        update z000_sd_pay_receipt_header
+        set cmpy = #{cmpy}, cstc = #{cstc}, bstp = #{bstp}, buss_date = #{bussDate},
+            buss_status = #{bussStatus}, router_code = #{routerCode}, title = #{title},
+            remark = #{remark}, user_id = #{userId}, curr = #{curr}, pay_nature = #{payNature},
+            pay_way = #{payWay}, cust = #{cust}, text = #{text}, prfc = #{prfc},
+            bank_doc = #{bankDoc}, amt_receipt = #{amtReceipt},
+            update_by = #{updateBy}, update_time = #{updateTime}
+        where receipt_id = #{receiptId}
+    </update>
+
+    <update id="updateStatusAndDocId">
+        update z000_sd_pay_receipt_header
+        set buss_status = #{bussStatus}
+        <if test="bussDocId != null and bussDocId != ''">, buss_doc_id = #{bussDocId}</if>
+        where receipt_id = #{bussId}
+    </update>
+
+    <update id="updateSapMsg">
+        update z000_sd_pay_receipt_header
+        set sap_mess_id = #{sapMessId}, sap_msg = #{sapMsg}
+        where receipt_id = #{receiptId}
+    </update>
+
+    <update id="updateSapVchInfo">
+        update z000_sd_pay_receipt_header
+        set vch_num = #{vchNum}, vch_year = #{vchYear},
+            sap_mess_id = #{sapMessId}, sap_msg = #{sapMsg}
+        where receipt_id = #{receiptId}
+    </update>
+
+    <update id="updateSapReverseVchInfo">
+        update z000_sd_pay_receipt_header
+        set vch_num_reverse = #{vchNumReverse}, vch_year_reverse = #{vchYearReverse},
+            sap_mess_id = #{sapMessId}, sap_msg = #{sapMsg}
+        where receipt_id = #{receiptId}
+    </update>
+
+    <delete id="deleteById">
+        delete from z000_sd_pay_receipt_header where receipt_id = #{receiptId}
+    </delete>
+
+    <select id="getSumAmtProcess" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(amt_receipt), 0) AS processAmtSum
+        FROM z000_sd_pay_receipt_header
+        WHERE (buss_status = 'A' OR buss_status = 'B') AND bank_doc = #{bankDoc}
+        GROUP BY bank_doc
+    </select>
+
+    <select id="getSumAmtReceipt" resultType="java.math.BigDecimal">
+        SELECT IFNULL(SUM(amt_receipt), 0) AS receiptAmtSum
+        FROM z000_sd_pay_receipt_header
+        WHERE (buss_status = 'D' or buss_status = 'F') AND bank_doc = #{bankDoc}
+        GROUP BY bank_doc
+    </select>
+</mapper>

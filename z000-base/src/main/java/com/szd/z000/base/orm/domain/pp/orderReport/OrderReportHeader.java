@@ -63,4 +63,12 @@ public class OrderReportHeader extends ClientWfBussBase {
      */
     private String bussStatus;
     private String bussStatusName;
+    /**
+     * 报工数量（行项目产量汇总，展示用，不存库）
+     */
+    private java.math.BigDecimal reportQty;
+    /**
+     * 废品数量（行项目废品汇总，展示用，不存库）
+     */
+    private java.math.BigDecimal scrapQty;
 }
