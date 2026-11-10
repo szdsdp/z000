@@ -7,12 +7,13 @@ spring:
     nacos:
       #注册中心
       discovery:
-        ip: 192.168.101.77
+#        ip: 10.8.0.10
+        ip: 192.168.101.58
       #配置中心
       config:
-        server-addr: 192.168.101.77:8848
+        server-addr: 192.168.101.172:8848
         username: nacos
-        password: nacos
+        password: Szd@2024DEV
         #前置名称
         prefix: z000
         file-extension: yaml # 文件后缀名
