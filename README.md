@@ -3288,7 +3288,6 @@ SR: {
 | title | PC | 标题 | String | false |
 
 - 字段帮助提示（PC）
-![image-20261120-compcontentview-2](./images/webapi/compcontentview-02.png)
 
 ```vue
 <szd-help-tip helpTip="ROUTER_CODE.KEY_VAL" />
@@ -3301,8 +3300,6 @@ SR: {
 | helpTip | PC | 帮助键值<br>内容维护到知识库中 | String |  |
 
 - 文件预览-标签（PC/APP）
-
-![image-20261120-compcontentview-1](./images/webapi/compcontentview-01.png)
 
 ```vue
 <!-- 标签使用 -->
@@ -3355,7 +3352,6 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 
 #### iframe 页面引用
 - 页面引用（PC）
-  ![image-20261110144126310](./images/webapi/iframe-01.png)
 ```vue
 <szd-ifr
   :routerCode="objData.routerCode"
@@ -3402,7 +3398,6 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 | change | APP | 更改事件 | Function |
 
 - 扫码-页面组件（APP）
-![image-20261120-compappscan-2](./images/webapi/compappscan-01.png)
 
 ```vue
 <!-- 需要通过按钮事件调用组件 -->
@@ -3488,8 +3483,6 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 
 - 卡片行数据（APP）
 
-![image-20261120-compappcard-2](./images/webapi/compappcard-02.png)
-
 ```vue
 <szd-card-a v-for="row in dataList">
   <!--  内容 -->
@@ -3516,8 +3509,6 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 
 - 标题显示（APP）
 
-![image-20261120-compappcard-3](./images/webapi/compappcard-03.png)
-
 ```vue
 <szd-title-label text="标题" />
 ```
@@ -3530,8 +3521,6 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 | required | APP | 必输 | Boolean | false |
 
 - 卡片行抬头（APP）
-
-![image-20261120-compappcard-4](./images/webapi/compappcard-04.png)
 
 ```vue
 <szd-card-a v-for="row in dataList">
@@ -3575,8 +3564,6 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 | view | APP | 详情 | Function |
 
 - 行全选（APP）
-
-![image-20261120-compappcard-5](./images/webapi/compappcard-04.png)
 
 ```vue
 <div class="szd__popup__top" style="justify-content: space-between">
@@ -3670,15 +3657,11 @@ handleSelRow(selection) {
 
 - 无文内容显示（APP）
 
-![image-20261120-compappcontentview-2](./images/webapi/compappcontentview-02.png)
-
 ```vue
 <szd-nothing/>
 ```
 
 - 弹窗标题插槽（APP）
-
-![image-20261120-compappcontentview-3](./images/webapi/compappcontentview-01.png)
 
 ```vue
 <var-dialog v-model:show="dg.open" close-on-click-overlay @close="handleClose" :confirm-button="false" :cancel-button="false">
@@ -4187,8 +4170,6 @@ v-szd-dialog=[width,height]
 | disabled | 是 | 是否可用 | Boolean | false |
 | more | APP | 更多 | Boolean | false |
 | hide | 是 | 是否隐藏 | Boolean | false |
-
-![image-20261120-compscharea-1](./images/webapi/compscharea-01.png)
 
 #### Search One 搜索单个
 - 高级搜索-单个（PC/APP）
