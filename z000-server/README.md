@@ -3,7 +3,7 @@ AI 低代码 零代码 工作流 组件库 快速开发
 
 [![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)]()
 [![](https://img.shields.io/badge/Author-河北尚智得-orange.svg)](https://www.szdsoft.cn/about)
-[![](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://gitee.com/szdsdp/z000)
+[![](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://github.com/szdsdp/z000)
 
 ## 简介
 
@@ -20,14 +20,12 @@ AI 低代码 零代码 工作流 组件库 快速开发
 ## 技术支持
 
 使用中遇到技术问题可以提交issue 
-[Issues](https://gitee.com/szdsdp/z000/issues)
+[Issues](https://github.com/szdsdp/z000/issues)
 
 - 官方网站：[https://www.szdsoft.cn](https://www.szdsoft.cn)
 - 平台介绍：https://szdsoft.cn/platform/home
 - 技术文档：[https://szdsoft.cn/platform/online-api/overview](https://szdsoft.cn/platform/online-api/overview)
-- 模版项目源码(后台) ：https://gitee.com/szdsdp/z000
-- 模版项目源码(前端) ：https://gitee.com/szdsdp/z000-web
-- 模版项目源码(手机端) ：https://gitee.com/szdsdp/z000-app
+- 模版项目源码：https://github.com/szdsdp/z000
 - 添加微信：
 - ![](./images/sdpQr1.png)
 - 关注公众号：

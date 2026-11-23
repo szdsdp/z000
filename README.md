@@ -3,7 +3,7 @@ AI 低代码 零代码 工作流 组件库 快速开发
 
 [![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)]()
 [![](https://img.shields.io/badge/Author-河北尚智得-orange.svg)](https://www.szdsoft.cn/about)
-[![](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://gitee.com/szdsdp/z000)
+[![](https://img.shields.io/badge/version-2.1.0-brightgreen.svg)](https://github.com/szdsdp/z000)
 
 ## 简介
 
@@ -20,18 +20,16 @@ AI 低代码 零代码 工作流 组件库 快速开发
 ## 技术支持
 
 使用中遇到技术问题可以提交issue 
-[Issues](https://gitee.com/szdsdp/z000/issues)
+[Issues](https://github.com/szdsdp/z000/issues)
 
 - 官方网站：[https://www.szdsoft.cn](https://www.szdsoft.cn)
 - 平台介绍：https://szdsoft.cn/platform/home
 - 技术文档：[https://szdsoft.cn/platform/online-api/overview](https://szdsoft.cn/platform/online-api/overview)
-- 模版项目源码(后台) ：https://gitee.com/szdsdp/z000
-- 模版项目源码(前端) ：https://gitee.com/szdsdp/z000-web
-- 模版项目源码(手机端) ：https://gitee.com/szdsdp/z000-app
+- 模版项目源码：https://github.com/szdsdp/z000
 - 添加微信：
-- ![](./images/sdpQr1.png)
+- ![](./z000-web/images/sdpQr1.png)
 - 关注公众号：
-- ![](./images/sdpQr2.png)
+- ![](./z000-web/images/sdpQr2.png)
 
 ## 在线体验
 
@@ -51,49 +49,49 @@ AI 低代码 零代码 工作流 组件库 快速开发
 
 ## 功能预览
 
-![image-20261110144126310](./images/demo01.png)
+![image-20261110144126310](./z000-web/images/demo01.png)
 
-![image-20261110144126310](./images/demo02.png)
+![image-20261110144126310](./z000-web/images/demo02.png)
 
-![image-20261110144126310](./images/demo03.png)
+![image-20261110144126310](./z000-web/images/demo03.png)
 
-![image-20261110144126310](./images/demo04.png)
+![image-20261110144126310](./z000-web/images/demo04.png)
 
-![image-20261110144126310](./images/demo05.png)
+![image-20261110144126310](./z000-web/images/demo05.png)
 
-![image-20261110144126310](./images/demo06.png)
+![image-20261110144126310](./z000-web/images/demo06.png)
 
-![image-20261110144126310](./images/demo07.png)
+![image-20261110144126310](./z000-web/images/demo07.png)
 
-![image-20261110144126310](./images/demo08.png)
+![image-20261110144126310](./z000-web/images/demo08.png)
 
-![image-20261110144126310](./images/demo09.png)
+![image-20261110144126310](./z000-web/images/demo09.png)
 
-![image-20261110144126310](./images/demo10.png)
+![image-20261110144126310](./z000-web/images/demo10.png)
 
-![image-20261110144126310](./images/demo11.png)
+![image-20261110144126310](./z000-web/images/demo11.png)
 
-![image-20261110144126310](./images/demo12.png)
+![image-20261110144126310](./z000-web/images/demo12.png)
 
-![image-20261110144126310](./images/demo13.png)
+![image-20261110144126310](./z000-web/images/demo13.png)
 
-![image-20261110144126310](./images/demo14.png)
+![image-20261110144126310](./z000-web/images/demo14.png)
 
-![image-20261110144126310](./images/demo15.png)
+![image-20261110144126310](./z000-web/images/demo15.png)
 
-![image-20261110144126310](./images/demo16.png)
+![image-20261110144126310](./z000-web/images/demo16.png)
 
-![image-20261110144126310](./images/demo17.png)
+![image-20261110144126310](./z000-web/images/demo17.png)
 
-![image-20261110144126310](./images/demo18.png)
+![image-20261110144126310](./z000-web/images/demo18.png)
 
-![image-20261110144126310](./images/demo19.png)
+![image-20261110144126310](./z000-web/images/demo19.png)
 
-![image-20261110144126310](./images/demo20.png)
+![image-20261110144126310](./z000-web/images/demo20.png)
 
-![image-20261110144126310](./images/demo21.png)
+![image-20261110144126310](./z000-web/images/demo21.png)
 
-![image-20261110144126310](./images/demo22.png)
+![image-20261110144126310](./z000-web/images/demo22.png)
 
 ## 前置程序
 ### 主数据(mdm)
@@ -2300,7 +2298,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 #### Input 输入框
 
 - 输入框（PC/APP）
-![image-20261110144126310](./images/webapi/input-01.png)
+![image-20261110144126310](./z000-web/images/webapi/input-01.png)
 ```vue
 <!-- help对象中a值'CORE_CMPY'来源于基础字段，详见[配套能力-基础字段] -->
 <szd-input
@@ -2404,7 +2402,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 ####  Input Number 数字输入框
 - 数值输入框（PC/APP）
-![image-20261110144126310](./images/webapi/inputNumber-01.png)
+![image-20261110144126310](./z000-web/images/webapi/inputNumber-01.png)
 
 ```vue
 <szd-input-number v-model="objData.val" @change="handleChange" />
@@ -2463,7 +2461,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 ####  Textarea 文本域
 - 文本域（PC/APP）
-  ![image-20261110144126310](./images/webapi/textArea-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/textArea-01.png)
 ```vue
 <szd-textarea v-model="objData.val" @change="handleChange" />
 
@@ -2518,7 +2516,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 ####  Date 日期
 - 日期（PC/APP）
-![image-20261110144126310](./images/webapi/date-01.png)
+![image-20261110144126310](./z000-web/images/webapi/date-01.png)
 ```vue
 <szd-date v-model="objData.val" @change="handleChange" />
 
@@ -2574,7 +2572,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 #### Time 时间
 - 时间（PC/APP）
-![image-20261110144126310](./images/webapi/time-01.png)
+![image-20261110144126310](./z000-web/images/webapi/time-01.png)
 ```vue
 <szd-time v-model="objData.val" @change="handleChange" />
 
@@ -2628,7 +2626,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 ####  Select 下拉框
 - 下拉框（PC/APP）
-![image-20261110144126310](./images/webapi/select-01.png)
+![image-20261110144126310](./z000-web/images/webapi/select-01.png)
 
 ```vue
 <!-- baseField值来源于基础字段，详见[配套能力-基础字段] -->
@@ -2698,7 +2696,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 ####  Checkbox 复选框
 - 复选框（PC/APP）
-![image-20261110144126310](./images/webapi/checkbox-01.png)
+![image-20261110144126310](./z000-web/images/webapi/checkbox-01.png)
 
 ```vue
 <szd-checkbox v-model="objData.val" boxLabel="是否" />
@@ -2769,7 +2767,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 ####  Radio 单选
 - 单选（PC/APP）
-![image-20261110144126310](./images/webapi/radio-01.png)
+![image-20261110144126310](./z000-web/images/webapi/radio-01.png)
 ```vue
 <!-- baseField值来源于基础字段，详见[配套能力-基础字段] -->
 <szd-radio
@@ -2833,7 +2831,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 ####  Password 密码
 - 密码（PC/APP）
-![image-20261110144126310](./images/webapi/password-01.png)
+![image-20261110144126310](./z000-web/images/webapi/password-01.png)
 
 ```vue
 <szd-password v-model="objData.val" @change="handleChange" />
@@ -2885,7 +2883,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 #### Area 地区
 - 地区（PC/APP）
-  ![image-20261110144126310](./images/webapi/area-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/area-01.png)
 ```vue
 <szd-area v-model="objData.val" @change="handleChange" />
 
@@ -2933,7 +2931,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 #### Button 按钮
 - 按钮（PC/APP）
-![image-20261110144126310](./images/webapi/button-01.png)
+![image-20261110144126310](./z000-web/images/webapi/button-01.png)
 ```vue
 <szd-button label="按钮" @click="handleClick" />
 ```
@@ -2964,7 +2962,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 #### Svg 图标
 - 图标（PC/APP）
-![image-20261110144126310](./images/webapi/svg-01.png)
+![image-20261110144126310](./z000-web/images/webapi/svg-01.png)
 ```vue
 <szd-svg name="pc-active" clicked @click="handleClick" fixed fontSize="24" />
 ```
@@ -2988,7 +2986,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 #### Upload 上传
 - 上传（PC/APP）
-![image-20261110144126310](./images/webapi/upload-01.png)
+![image-20261110144126310](./z000-web/images/webapi/upload-01.png)
 ```vue
 <szd-upload-view v-model="objData.val" fileCate="DEMO_UPLOAD" acceptTxt="提示消息" :limit="3" />
 
@@ -3085,7 +3083,7 @@ public class ProgJobPayRetQuery implements ClientProgJobInf {
 
 #### Fold 折叠
 - 文件夹折叠（PC）
-![image-20261110144126310](./images/webapi/fold-01.png)
+![image-20261110144126310](./z000-web/images/webapi/fold-01.png)
 ```vue
 <szd-tabs-fold label="文件夹折叠">
    <div class="l-src-content">内容区域</div>
@@ -3158,7 +3156,7 @@ SR: {
 
 #### Pagination 分页
 - 分页（PC/APP）
-  ![image-20261110144126310](./images/webapi/page-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/page-01.png)
 ```vue
 <szd-pagination :total="page.total" v-model:page="page.pageNum" v-model:limit="page.pageSize" @pagination="getList" />
 ```
@@ -3183,7 +3181,7 @@ SR: {
 
 #### Editor 富文本
 - 富文本（PC）
-  ![image-20261110144126310](./images/webapi/editor-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/editor-01.png)
 ```vue
 <!-- 数据定义 -->
  dg: {
@@ -3229,7 +3227,7 @@ SR: {
 
 #### Content 内容显示
 - 描述显示—超宽鼠标拖动显示（PC/APP）
-  ![image-20261110144126310](./images/webapi/content-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/content-01.png)
 ```vue
 <szd-desc :text="objData.val" />
 ```
@@ -3369,7 +3367,7 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 
 #### Scan 扫码
 - 扫码-输入框（APP）
-  ![image-20261110144126310](./images/webapi/appScan-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/appScan-01.png)
 ```vue
 <szd-scan placeholder="扫码" v-model="test.scan" :scanCtrl="{}" clearable @change="handleChange" required />
 ```
@@ -3449,7 +3447,7 @@ this.szdFileView({ src: objData.src, fileName: "file.png" });
 #### Card 卡片
 - 卡片（APP）
 
-![image-20261120-compappcard-1](./images/webapi/appCard-01.png)
+![image-20261120-compappcard-1](./z000-web/images/webapi/appCard-01.png)
 
 ```vue
 <szd-card-a v-for="row in dataList">
@@ -3640,7 +3638,7 @@ handleSelRow(selection) {
 #### Content 内容显示
 - 文本显示（APP）
 
-![image-20261120-compappcontentview-1](./images/webapi/appContent-01.png)
+![image-20261120-compappcontentview-1](./z000-web/images/webapi/appContent-01.png)
 
 ```vue
 <szd-text placeholder="文本" :text="test.text" />
@@ -3690,7 +3688,7 @@ handleSelRow(selection) {
 #### Search Help 搜索帮助
 - 搜索帮助原理（PC/APP）
 
-![image-20261120-compsearchhelp-1](./images/webapi/funcSH-01.png)
+![image-20261120-compsearchhelp-1](./z000-web/images/webapi/funcSH-01.png)
 
 - 标签应用（PC/APP）
 
@@ -3798,7 +3796,7 @@ handleSelRow(selection) {
 
 #### Msg 消息
 - 消息列表（PC/APP）
-  ![image-20261120-compsearchhelp-1](./images/webapi/funcMsg-01.png)
+  ![image-20261120-compsearchhelp-1](./z000-web/images/webapi/funcMsg-01.png)
 ```java
 /**
  * 消息弹窗
@@ -3915,7 +3913,7 @@ this.$mS("点击结果为then");
 
 #### Upload 上传
 - 文件上传（PC/APP）
-  ![image-20261120-compsearchhelp-1](./images/webapi/funcUpload-01.png)
+  ![image-20261120-compsearchhelp-1](./z000-web/images/webapi/funcUpload-01.png)
 ```java
 /**
  * 上传组件
@@ -4088,7 +4086,7 @@ v-szd-dialog=[width,height]
 
 #### Search Area 搜索区域
 - 高级搜索-区域（PC/APP）
-  ![image-20261110144126310](./images/webapi/comSearch-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/comSearch-01.png)
 ```vue
 <!-- 变量定义 -->
  queryParams: { ranges: {} },
@@ -4173,7 +4171,7 @@ v-szd-dialog=[width,height]
 
 #### Search One 搜索单个
 - 高级搜索-单个（PC/APP）
-  ![image-20261110144126310](./images/webapi/comSearchOne-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/comSearchOne-01.png)
 ```vue
 <szd-sch v-model="objData.val1" :help="{ a: 'CORE_CMPY' }" />
 
@@ -4227,7 +4225,7 @@ v-szd-dialog=[width,height]
 
 #### Senior Table 高级表格
 - 高级表格（PC/APP）
-  ![image-20261110144126310](./images/webapi/comTable-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/comTable-01.png)
 ```vue
 <!-- 变量定义 -->
       lay: {
@@ -4578,7 +4576,7 @@ v-szd-dialog=[width,height]
 
 #### Statistics 统计分析
 - 统计分析（PC）
-  ![image-20261110144126310](./images/webapi/comStat-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/comStat-01.png)
 ```vue
 <!-- 变量定义 -->
       lay: {
@@ -4638,7 +4636,7 @@ v-szd-dialog=[width,height]
 
 #### Ai Chat AI组件
 - AI组件（PC）
-  ![image-20261110144126310](./images/webapi/comAi-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/comAi-01.png)
 ```vue
 <szd-ai-chat-div
   :data="dataObj"
@@ -4763,7 +4761,7 @@ v-szd-dialog=[width,height]
 
 #### Wf Button 工作流按钮
 - 工作流按钮（PC/APP）
-  ![image-20261110144126310](./images/webapi/wfBtn-01.png)
+  ![image-20261110144126310](./z000-web/images/webapi/wfBtn-01.png)
 ```vue
 <!-- 变量定义 -->
 SR: {

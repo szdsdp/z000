@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "update": "npm install --save szd-client-app@git+https://github.com/szdsdp/z000-app.git"
+    "update": "npm install --save szd-client-app@git+https://github.com/szdsdp/szd-client-app.git"
   },
   "dependencies": {
     "@varlet/ui": "^3.15.2",
@@ -18,7 +18,7 @@
     "lodash": "^4.18.1",
     "nprogress": "^0.2.0",
     "pixiu-number-toolkit": "^1.3.0",
-    "szd-client-app": "git+https://github.com/szdsdp/z000-app.git",
+    "szd-client-app": "git+https://github.com/szdsdp/szd-client-app.git",
     "vue": "^3.2.13",
     "vue-demi": "^0.14.6",
     "vue-qrcode-reader": "^5.7.0",

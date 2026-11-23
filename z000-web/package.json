@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "npm run update && vue-cli-service build",
-    "update": "npm install --save szd-client-web@git+https://github.com/szdsdp/z000-web.git",
+    "update": "npm install --save szd-client-web@git+https://github.com/szdsdp/szd-client-web.git",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -32,7 +32,7 @@
     "screenfull": "^6.0.2",
     "shiki": "^3.23.0",
     "shiki-stream": "^0.1.4",
-    "szd-client-web": "git+https://github.com/szdsdp/z000-web.git",
+    "szd-client-web": "git+https://github.com/szdsdp/szd-client-web.git",
     "vkbeautify": "^0.99.3",
     "vue": "^3.2.13",
     "vue-demi": "^0.14.6",
