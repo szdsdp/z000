@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <title><%= process.env.VUE_APP_SYS_NAME %></title>
+
+  <% if (process.env.NODE_ENV === 'production') { %>
+  <!-- vue基础 -->
+  <script src="/cdn/vue/3.5.40/vue.global.prod.js"></script>
+  <script src="/cdn/vue-demi/0.14.10/index.iife.js"></script>
+  <script src="/cdn/vuex/4.1.0/vuex.global.prod.js"></script>
+  <!-- lodash -->
+  <script src="/cdn/lodash/4.18.1/lodash.min.js"></script>
+
+  <!-- element-plus -->
+  <script src="/cdn/element-plus/2.13.7/index.full.min.js"></script>
+  <script src="/cdn/element-plus-icons-vue/2.3.2/index.iife.min.js"></script>
+
+  <!-- sortablejs + vuedraggable -->
+  <script src="/cdn/sortablejs/1.14.0/Sortable.min.js"></script>
+  <script src="/cdn/vuedraggable/4.1.0/vuedraggable.umd.min.js"></script>
+
+  <!-- vue-element-plus-x 依赖的 icons 别名 -->
+  <script>window.iconsVue = window.ElementPlusIconsVue;</script>
+  <!-- vue-element-plus-x -->
+  <script src="/cdn/vue-element-plus-x/2.0.3/index.js"></script>
+
+  <!-- echarts -->
+  <script src="/cdn/echarts/5.6.0/echarts.min.js"></script>
+
+  <!-- highlight.js -->
+  <script src="/cdn/highlight/11.11.1/highlight.min.js"></script>
+
+  <!-- wangEditor -->
+  <script src="/cdn/wangeditor/editor/5.1.23/index.js"></script>
+  <script src="/cdn/wangeditor/plugin-upload-attachment/1.1.0/index.js"></script>
+
+  <!-- xlsx-js-style -->
+  <script src="/cdn/xlsx-js-style/1.2.0/xlsx.min.js"></script>
+
+  <!-- vue-office-excel -->
+  <script src="/cdn/vue-office-excel/1.7.14/index.js"></script>
+
+  <!-- vue-office-docx -->
+  <script src="/cdn/vue-office-docx/1.6.3/index.js"></script>
+
+  <!-- compressorjs -->
+  <script src="/cdn/compressorjs/1.2.1/compressor.min.js"></script>
+
+  <!-- jsencrypt -->
+  <script src="/cdn/jsencrypt/3.3.2/jsencrypt.min.js"></script>
+  <% } %>
+</head>
+<body>
+<div id="app" />
+</body>
+</html>
