@@ -22,10 +22,12 @@ AI 低代码 零代码 工作流 组件库 快速开发
 使用中遇到技术问题可以提交issue 
 [Issues](https://github.com/szdsdp/z000/issues)
 
-- 官方网站：[https://www.szdsoft.cn](https://www.szdsoft.cn)
-- 平台介绍：https://szdsoft.cn/platform/home
-- 技术文档：[https://szdsoft.cn/platform/online-api/overview](https://szdsoft.cn/platform/online-api/overview)
-- 模版项目源码：https://github.com/szdsdp/z000
+- 官方网站：https://www.szdsoft.cn
+- 平台介绍：https://www.szdsoft.cn/platform/home
+- 技术文档：https://www.szdsoft.cn/platform/online-api/overview
+- 数字化AI平台部署：https://www.szdsoft.cn/platform/download
+- 示例模版项目源码 ：https://github.com/szdsdp/z000 (<span style="color:red">项目运行需要先部署数字化AI平台</span>)
+- 纯净模版项目源码 ：https://github.com/szdsdp/z001 (<span style="color:red">项目运行需要先部署数字化AI平台</span>)
 - 添加微信：
 - ![](./images/sdpQr1.png)
 - 关注公众号：
